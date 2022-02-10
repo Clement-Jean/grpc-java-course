@@ -115,12 +115,12 @@ public class GreetingClient {
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext().build();
 
         switch (args[0]) {
-            case "greet" -> doGreet(channel);
-            case "greet_many_times" -> doGreetManyTimes(channel);
-            case "greet_long" -> doLongGreet(channel);
-            case "greet_everyone" -> doGreetEveryone(channel);
-            case "greet_with_deadline" -> doGreetWithDeadline(channel);
-            default -> System.out.println("Keyword Invalid: " + args[0]);
+            case "greet": doGreet(channel); break;
+            case "greet_many_times": doGreetManyTimes(channel); break;
+            case "greet_long": doLongGreet(channel); break;
+            case "greet_everyone": doGreetEveryone(channel); break;
+            case "greet_with_deadline": doGreetWithDeadline(channel); break;
+            default: System.out.println("Keyword Invalid: " + args[0]);
         }
 
         System.out.println("Shutting Down");

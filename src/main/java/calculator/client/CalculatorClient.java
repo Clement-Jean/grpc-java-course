@@ -100,12 +100,12 @@ public class CalculatorClient {
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50052).usePlaintext().build();
 
         switch (args[0]) {
-            case "sum" -> doSum(channel);
-            case "primes" -> doPrimes(channel);
-            case "avg" -> doAvg(channel);
-            case "max" -> doMax(channel);
-            case "sqrt" -> doSqrt(channel);
-            default -> System.out.println("Keyword Invalid: " + args[0]);
+            case "sum": doSum(channel); break;
+            case "primes": doPrimes(channel); break;
+            case "avg": doAvg(channel); break;
+            case "max": doMax(channel); break;
+            case "sqrt": doSqrt(channel); break;
+            default: System.out.println("Keyword Invalid: " + args[0]);
         }
 
         System.out.println("Shutting Down");

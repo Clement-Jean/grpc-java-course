@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,7 +62,7 @@ public class GreetEveryoneServerTest extends ServerTestBase<GreetServiceGrpc.Gre
         boolean reachedZero = latch.await(3, TimeUnit.SECONDS);
 
         assertTrue(reachedZero);
-        assertEquals(finalResult, names.stream().map(name -> "Hello " + name).toList());
+        assertEquals(finalResult, names.stream().map(name -> "Hello " + name).collect(Collectors.toList()));
         assertNull(error);
     }
 }

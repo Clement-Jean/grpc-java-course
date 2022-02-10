@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'com.google.protobuf' version '0.8.18'
+}
+
+group 'com.clementjean.grpc'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.19.2"
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.44.0'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+sourceSets.main.java.srcDir new File(buildDir, 'generated/source')
+
+dependencies {
+    implementation 'junit:junit:4.13.1'
+    runtimeOnly 'io.grpc:grpc-netty-shaded:1.44.0'
+    implementation 'io.grpc:grpc-protobuf:1.44.0'
+    implementation 'io.grpc:grpc-stub:1.44.0'
+    implementation 'io.grpc:grpc-services:1.44.0'
+    compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
+
+    implementation 'org.mongodb:mongodb-driver-sync:4.4.1'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation 'org.mockito:mockito-core:4.3.1'
+}
+
+test {
+    useJUnitPlatform()
+}

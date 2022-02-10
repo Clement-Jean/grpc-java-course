@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package calculator;
+
+option java_package = "com.proto.calculator";
+option java_multiple_files = true;
+
+message SqrtRequest {
+  int32 number = 1;
+}
+
+message SqrtResponse {
+  double result = 1;
+}

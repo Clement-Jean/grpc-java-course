@@ -24,7 +24,7 @@ public class ServerTestBase<BLOCKING_STUB extends AbstractBlockingStub, ASYNC_ST
     protected BLOCKING_STUB blockingStub = null;
     protected ASYNC_STUB asyncStub = null;
 
-    private final List<BindableService> services = new ArrayList<>();
+    private final List<BindableService> services = new ArrayList<BindableService>();
 
     protected void addService(BindableService service) {
         this.services.add(service);

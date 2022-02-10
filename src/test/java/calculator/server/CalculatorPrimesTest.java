@@ -20,7 +20,7 @@ public class CalculatorPrimesTest extends ServerTestBase<
         setBlockingStubInstantiator(CalculatorServiceGrpc::newBlockingStub);
     }
 
-    private final List<Integer> results = new ArrayList<>();
+    private final List<Integer> results = new ArrayList<Integer>();
 
     @Test
     void primesTest() {
@@ -28,7 +28,7 @@ public class CalculatorPrimesTest extends ServerTestBase<
             results.add(prime.getPrimeFactor())
         );
 
-        List<Integer> primes = new ArrayList<>();
+        List<Integer> primes = new ArrayList<Integer>();
         Collections.addAll(primes, 2, 5, 109, 521);
 
         assertEquals(results, primes);

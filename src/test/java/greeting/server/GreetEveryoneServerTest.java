@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GreetEveryoneServerTest extends ServerTestBase<GreetServiceGrpc.GreetServiceBlockingStub, GreetServiceGrpc.GreetServiceStub> {
 
-    private final List<String> finalResult = new ArrayList<>();
+    private final List<String> finalResult = new ArrayList<String>();
 
     @Nullable
     private Throwable error = null;
@@ -30,12 +30,12 @@ public class GreetEveryoneServerTest extends ServerTestBase<GreetServiceGrpc.Gre
 
     @Test
     void greetEveryoneImplReplyMessage() throws InterruptedException {
-        List<String> names = new ArrayList<>();
+        List<String> names = new ArrayList<String>();
         CountDownLatch latch = new CountDownLatch(1);
 
         Collections.addAll(names, "Clement", "Marie", "Test");
 
-        StreamObserver<GreetRequest> stream = asyncStub.greetEveryone(new StreamObserver<>() {
+        StreamObserver<GreetRequest> stream = asyncStub.greetEveryone(new StreamObserver<GreetResponse>() {
             @Override
             public void onNext(GreetResponse response) {
                 finalResult.add(response.getResult());

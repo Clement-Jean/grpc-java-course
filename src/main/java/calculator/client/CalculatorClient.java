@@ -32,7 +32,7 @@ public class CalculatorClient {
         CalculatorServiceGrpc.CalculatorServiceStub stub = CalculatorServiceGrpc.newStub(channel);
         CountDownLatch latch = new CountDownLatch(1);
 
-        StreamObserver<AvgRequest> stream = stub.avg(new StreamObserver<>() {
+        StreamObserver<AvgRequest> stream = stub.avg(new StreamObserver<AvgResponse>() {
             @Override
             public void onNext(AvgResponse response) {
                 System.out.println("Avg = " + response.getResult());
@@ -60,7 +60,7 @@ public class CalculatorClient {
         CalculatorServiceGrpc.CalculatorServiceStub stub = CalculatorServiceGrpc.newStub(channel);
         CountDownLatch latch = new CountDownLatch(1);
 
-        StreamObserver<MaxRequest> stream = stub.max(new StreamObserver<>() {
+        StreamObserver<MaxRequest> stream = stub.max(new StreamObserver<MaxResponse>() {
             @Override
             public void onNext(MaxResponse response) {
                 System.out.println(response.getMax());

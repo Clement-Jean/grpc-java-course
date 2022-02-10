@@ -32,7 +32,7 @@ public class CalculatorServiceImpl extends CalculatorServiceGrpc.CalculatorServi
 
     @Override
     public StreamObserver<AvgRequest> avg(StreamObserver<AvgResponse> responseObserver) {
-        return new StreamObserver<>() {
+        return new StreamObserver<AvgRequest>() {
             int sum = 0;
             int count = 0;
 
@@ -57,7 +57,7 @@ public class CalculatorServiceImpl extends CalculatorServiceGrpc.CalculatorServi
 
     @Override
     public StreamObserver<MaxRequest> max(StreamObserver<MaxResponse> responseObserver) {
-        return new StreamObserver<>() {
+        return new StreamObserver<MaxRequest>() {
             int max = 0;
 
             @Override

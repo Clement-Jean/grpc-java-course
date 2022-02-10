@@ -35,12 +35,12 @@ public class GreetingClient {
         System.out.println("Enter doLongGreet");
         GreetServiceGrpc.GreetServiceStub stub = GreetServiceGrpc.newStub(channel);
 
-        List<String> names = new ArrayList<>();
+        List<String> names = new ArrayList<String>();
         CountDownLatch latch = new CountDownLatch(1);
 
         Collections.addAll(names, "Clement", "Marie", "Test");
 
-        StreamObserver<GreetRequest> stream = stub.longGreet(new StreamObserver<>() {
+        StreamObserver<GreetRequest> stream = stub.longGreet(new StreamObserver<GreetResponse>() {
             @Override
             public void onNext(GreetResponse response) {
                 System.out.println(response.getResult());
@@ -69,7 +69,7 @@ public class GreetingClient {
         GreetServiceGrpc.GreetServiceStub stub = GreetServiceGrpc.newStub(channel);
         CountDownLatch latch = new CountDownLatch(1);
 
-        StreamObserver<GreetRequest> stream = stub.greetEveryone(new StreamObserver<>() {
+        StreamObserver<GreetRequest> stream = stub.greetEveryone(new StreamObserver<GreetResponse>() {
             @Override
             public void onNext(GreetResponse response) {
                 System.out.println(response.getResult());

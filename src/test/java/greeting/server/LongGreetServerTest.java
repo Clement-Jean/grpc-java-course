@@ -30,12 +30,12 @@ public class LongGreetServerTest extends ServerTestBase<GreetServiceGrpc.GreetSe
 
     @Test
     void longGreetImplReplyMessage() throws InterruptedException {
-        List<String> names = new ArrayList<>();
+        List<String> names = new ArrayList<String>();
         CountDownLatch latch = new CountDownLatch(1);
 
         Collections.addAll(names, "Clement", "Marie", "Test");
 
-        StreamObserver<GreetRequest> stream = asyncStub.longGreet(new StreamObserver<>() {
+        StreamObserver<GreetRequest> stream = asyncStub.longGreet(new StreamObserver<GreetResponse>() {
             @Override
             public void onNext(GreetResponse response) {
                 finalResult = response.getResult();

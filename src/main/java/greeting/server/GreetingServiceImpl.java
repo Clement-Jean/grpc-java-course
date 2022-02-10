@@ -26,7 +26,7 @@ public class GreetingServiceImpl extends GreetServiceGrpc.GreetServiceImplBase {
     public StreamObserver<GreetRequest> longGreet(StreamObserver<GreetResponse> responseObserver) {
         StringBuilder sb = new StringBuilder();
 
-        return new StreamObserver<>() {
+        return new StreamObserver<GreetRequest>() {
             @Override
             public void onNext(GreetRequest request) {
                 sb.append("Hello ")
@@ -49,7 +49,7 @@ public class GreetingServiceImpl extends GreetServiceGrpc.GreetServiceImplBase {
 
     @Override
     public StreamObserver<GreetRequest> greetEveryone(StreamObserver<GreetResponse> responseObserver) {
-        return new StreamObserver<>() {
+        return new StreamObserver<GreetRequest>() {
             @Override
             public void onNext(GreetRequest request) {
                 responseObserver.onNext(GreetResponse.newBuilder().setResult("Hello " + request.getFirstName()).build());

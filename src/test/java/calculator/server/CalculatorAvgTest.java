@@ -32,12 +32,12 @@ public class CalculatorAvgTest extends ServerTestBase<
 
     @Test
     void avgTest() throws InterruptedException {
-        List<Integer> numbers = new ArrayList<>();
+        List<Integer> numbers = new ArrayList<Integer>();
         CountDownLatch latch = new CountDownLatch(1);
 
         Collections.addAll(numbers, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
-        StreamObserver<AvgRequest> stream = asyncStub.avg(new StreamObserver<>() {
+        StreamObserver<AvgRequest> stream = asyncStub.avg(new StreamObserver<AvgResponse>() {
             @Override
             public void onNext(AvgResponse response) {
                 finalResult = response.getResult();

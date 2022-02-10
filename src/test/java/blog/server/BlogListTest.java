@@ -30,7 +30,7 @@ public class BlogListTest extends ServerTestBase<
     @Mock
     private MongoDatabase mockDB;
 
-    private final List<Blog> finalResult = new ArrayList<>();
+    private final List<Blog> finalResult = new ArrayList<Blog>();
 
     BlogListTest() {
         MockitoAnnotations.openMocks(this);

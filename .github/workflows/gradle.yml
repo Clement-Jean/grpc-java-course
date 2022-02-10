@@ -1,0 +1,28 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-2022, ubuntu-20.04, macos-11]
+        jdk: ['8', '17']
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.jdk }}
+          distribution: 'temurin'
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
+        with:
+          arguments: build

@@ -1,5 +1,6 @@
 package blog.server;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.Empty;
 import com.mongodb.client.*;
 import com.mongodb.client.result.DeleteResult;
@@ -16,14 +17,24 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
 
-    public static final String BLOG_COULDNT_BE_CREATED = "The blog could not be created";
-    public static final String BLOG_WAS_NOT_FOUND = "The blog with the corresponding id was not found";
+    @VisibleForTesting
+    static final String BLOG_COULDNT_BE_CREATED = "The blog could not be created";
+    @VisibleForTesting
+    static final String BLOG_WAS_NOT_FOUND = "The blog with the corresponding id was not found";
 
     private final MongoCollection<Document> mongoCollection;
 
     BlogServiceImpl(MongoClient mongoClient) {
         MongoDatabase mongoDatabase = mongoClient.getDatabase("blogdb");
         this.mongoCollection = mongoDatabase.getCollection("blog");
+    }
+
+    private io.grpc.StatusRuntimeException error(Status status, String message) {
+        return status.withDescription(message).asRuntimeException();
+    }
+
+    private io.grpc.StatusRuntimeException error(Status status, String message, String augmentMessage) {
+        return status.withDescription(message).augmentDescription(augmentMessage).asRuntimeException();
     }
 
     Blog documentToBlog(Document document){
@@ -47,11 +58,7 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
         InsertOneResult result = mongoCollection.insertOne(doc);
 
         if (!result.wasAcknowledged() || result.getInsertedId() == null) {
-            responseObserver.onError(
-                Status.ABORTED
-                    .withDescription(BLOG_COULDNT_BE_CREATED)
-                    .asRuntimeException()
-            );
+            responseObserver.onError(error(Status.ABORTED, BLOG_COULDNT_BE_CREATED));
             return;
         }
 
@@ -76,22 +83,13 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
         try {
             result = mongoCollection.find(eq("_id", new ObjectId(blogId))).first();
         } catch (Exception e) {
-            responseObserver.onError(
-                Status.NOT_FOUND
-                    .withDescription(BLOG_WAS_NOT_FOUND)
-                    .augmentDescription(e.getLocalizedMessage())
-                    .asRuntimeException()
-            );
+            responseObserver.onError(error(Status.NOT_FOUND, BLOG_WAS_NOT_FOUND, e.getLocalizedMessage()));
             return;
         }
 
         if (result == null) {
             System.out.println("Blog not found");
-            responseObserver.onError(
-                Status.NOT_FOUND
-                    .withDescription(BLOG_WAS_NOT_FOUND)
-                    .asRuntimeException()
-            );
+            responseObserver.onError(error(Status.NOT_FOUND, BLOG_WAS_NOT_FOUND));
             return;
         }
 
@@ -111,22 +109,13 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
         try {
             result = mongoCollection.find(eq("_id", new ObjectId(blogId))).first();
         } catch (Exception e) {
-            responseObserver.onError(
-                Status.NOT_FOUND
-                    .withDescription(BLOG_WAS_NOT_FOUND)
-                    .augmentDescription(e.getLocalizedMessage())
-                    .asRuntimeException()
-            );
+            responseObserver.onError(error(Status.NOT_FOUND, BLOG_WAS_NOT_FOUND, e.getLocalizedMessage()));
             return;
         }
 
         if (result == null) {
             System.out.println("Blog not found");
-            responseObserver.onError(
-                Status.NOT_FOUND
-                    .withDescription(BLOG_WAS_NOT_FOUND)
-                    .asRuntimeException()
-            );
+            responseObserver.onError(error(Status.NOT_FOUND, BLOG_WAS_NOT_FOUND));
             return;
         }
 
@@ -154,22 +143,13 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
             result = mongoCollection.deleteOne(eq("_id", new ObjectId(request.getId())));
         } catch (Exception e) {
             System.out.println("Blog not found");
-            responseObserver.onError(
-                Status.NOT_FOUND
-                    .withDescription(BLOG_WAS_NOT_FOUND)
-                    .augmentDescription(e.getLocalizedMessage())
-                    .asRuntimeException()
-            );
+            responseObserver.onError(error(Status.NOT_FOUND, BLOG_WAS_NOT_FOUND, e.getLocalizedMessage()));
             return;
         }
 
         if (!result.wasAcknowledged() || result.getDeletedCount() == 0) {
             System.out.println("Blog not found");
-            responseObserver.onError(
-                Status.NOT_FOUND
-                    .withDescription(BLOG_WAS_NOT_FOUND)
-                    .asRuntimeException()
-            );
+            responseObserver.onError(error(Status.NOT_FOUND, BLOG_WAS_NOT_FOUND));
             return;
         }
 

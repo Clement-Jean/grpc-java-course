@@ -1,5 +1,7 @@
 package blog.client;
 
+import blog.server.BlogServer;
+import blog.server.BlogServiceImpl;
 import com.proto.blog.Blog;
 import com.proto.blog.BlogId;
 import com.proto.blog.BlogServiceGrpc;

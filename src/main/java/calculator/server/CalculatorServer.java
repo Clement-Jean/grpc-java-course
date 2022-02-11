@@ -1,5 +1,6 @@
 package calculator.server;
 
+import greeting.client.LogInterceptor;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 

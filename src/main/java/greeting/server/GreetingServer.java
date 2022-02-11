@@ -13,6 +13,8 @@ public class GreetingServer {
         Server server = ServerBuilder.forPort(port)
                 .addService(new GreetingServiceImpl())
                 .addService(ProtoReflectionService.newInstance())
+                .intercept(new LogInterceptor())
+                .intercept(new HeaderCheckInterceptor())
                 .build();
 
         server.start();

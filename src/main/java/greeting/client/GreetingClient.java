@@ -112,7 +112,12 @@ public class GreetingClient {
             System.out.println("Need one argument to work");
         }
 
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder
+                .forAddress("localhost", 50051)
+                .intercept(new LogInterceptor())
+                .intercept(new AddHeaderInterceptor())
+                .usePlaintext()
+                .build();
 
         switch (args[0]) {
             case "greet": doGreet(channel); break;

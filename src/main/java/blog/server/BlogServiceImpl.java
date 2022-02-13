@@ -20,6 +20,8 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
     @VisibleForTesting
     static final String BLOG_COULDNT_BE_CREATED = "The blog could not be created";
     @VisibleForTesting
+    static final String BLOG_COULDNT_BE_DELETED = "The blog could not be deleted";
+    @VisibleForTesting
     static final String BLOG_WAS_NOT_FOUND = "The blog with the corresponding id was not found";
 
     private final MongoCollection<Document> mongoCollection;
@@ -147,7 +149,13 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
             return;
         }
 
-        if (!result.wasAcknowledged() || result.getDeletedCount() == 0) {
+        if (!result.wasAcknowledged()) {
+            System.out.println("Blog could not be deleted");
+            responseObserver.onError(error(Status.INTERNAL, BLOG_COULDNT_BE_DELETED));
+            return;
+        }
+
+        if (result.getDeletedCount() == 0) {
             System.out.println("Blog not found");
             responseObserver.onError(error(Status.NOT_FOUND, BLOG_WAS_NOT_FOUND));
             return;

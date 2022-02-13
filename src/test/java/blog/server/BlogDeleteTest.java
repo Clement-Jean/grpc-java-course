@@ -54,6 +54,24 @@ public class BlogDeleteTest extends ServerTestBase<
 
     @Test
     @SuppressWarnings("ResultOfMethodCallIgnored")
+    void deleteNotAcknowledgedTest() {
+        String id = "579397d20c2dd41b9a8a09eb";
+
+        when(mockCollection.deleteOne(any(Bson.class))).thenReturn(DeleteResult.acknowledged(0));
+
+        try {
+            blockingStub.deleteBlog(BlogId.newBuilder().setId(id).build());
+            fail("There should be an error in this case");
+        } catch (StatusRuntimeException e) {
+            Status status = Status.fromThrowable(e);
+
+            assertEquals(Status.Code.NOT_FOUND, status.getCode());
+            assertEquals(BlogServiceImpl.BLOG_WAS_NOT_FOUND, status.getDescription());
+        }
+    }
+
+    @Test
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     void deleteNotFoundTest() {
         String id = "579397d20c2dd41b9a8a09eb";
 
@@ -65,8 +83,8 @@ public class BlogDeleteTest extends ServerTestBase<
         } catch (StatusRuntimeException e) {
             Status status = Status.fromThrowable(e);
 
-            assertEquals(Status.Code.NOT_FOUND, status.getCode());
-            assertEquals(BlogServiceImpl.BLOG_WAS_NOT_FOUND, status.getDescription());
+            assertEquals(Status.Code.INTERNAL, status.getCode());
+            assertEquals(BlogServiceImpl.BLOG_COULDNT_BE_DELETED, status.getDescription());
         }
     }
 

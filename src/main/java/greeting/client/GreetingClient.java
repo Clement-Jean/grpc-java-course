@@ -1,6 +1,6 @@
 package greeting.client;
 
-import com.proto.greet.*;
+import com.proto.greeting.*;
 import io.grpc.Deadline;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -16,33 +16,33 @@ import java.util.concurrent.TimeUnit;
 public class GreetingClient {
     private static void doGreet(ManagedChannel channel) {
         System.out.println("Enter doGreet");
-        GreetServiceGrpc.GreetServiceBlockingStub stub = GreetServiceGrpc.newBlockingStub(channel);
-        GreetResponse response = stub.greet(GreetRequest.newBuilder().setFirstName("Clement").setLastName("Jean").build());
+        GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);
+        GreetingResponse response = stub.greet(GreetingRequest.newBuilder().setFirstName("Clement").build());
 
         System.out.println("Greeting: " + response.getResult());
     }
 
     private static void doGreetManyTimes(ManagedChannel channel) {
         System.out.println("Enter doGreetManyTimes");
-        GreetServiceGrpc.GreetServiceBlockingStub stub = GreetServiceGrpc.newBlockingStub(channel);
+        GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);
 
-        stub.greetManyTimes(GreetRequest.newBuilder().setFirstName("Clement").build()).forEachRemaining(response -> {
+        stub.greetManyTimes(GreetingRequest.newBuilder().setFirstName("Clement").build()).forEachRemaining(response -> {
             System.out.println(response.getResult());
         });
     }
 
     private static void doLongGreet(ManagedChannel channel) throws InterruptedException {
         System.out.println("Enter doLongGreet");
-        GreetServiceGrpc.GreetServiceStub stub = GreetServiceGrpc.newStub(channel);
+        GreetingServiceGrpc.GreetingServiceStub stub = GreetingServiceGrpc.newStub(channel);
 
         List<String> names = new ArrayList<String>();
         CountDownLatch latch = new CountDownLatch(1);
 
         Collections.addAll(names, "Clement", "Marie", "Test");
 
-        StreamObserver<GreetRequest> stream = stub.longGreet(new StreamObserver<GreetResponse>() {
+        StreamObserver<GreetingRequest> stream = stub.longGreet(new StreamObserver<GreetingResponse>() {
             @Override
-            public void onNext(GreetResponse response) {
+            public void onNext(GreetingResponse response) {
                 System.out.println(response.getResult());
             }
 
@@ -56,7 +56,7 @@ public class GreetingClient {
         });
 
         for (String name: names) {
-            stream.onNext(GreetRequest.newBuilder().setFirstName(name).build());
+            stream.onNext(GreetingRequest.newBuilder().setFirstName(name).build());
         }
 
         stream.onCompleted();
@@ -66,12 +66,12 @@ public class GreetingClient {
 
     private static void doGreetEveryone(ManagedChannel channel) throws InterruptedException {
         System.out.println("Enter doGreetEveryone");
-        GreetServiceGrpc.GreetServiceStub stub = GreetServiceGrpc.newStub(channel);
+        GreetingServiceGrpc.GreetingServiceStub stub = GreetingServiceGrpc.newStub(channel);
         CountDownLatch latch = new CountDownLatch(1);
 
-        StreamObserver<GreetRequest> stream = stub.greetEveryone(new StreamObserver<GreetResponse>() {
+        StreamObserver<GreetingRequest> stream = stub.greetEveryone(new StreamObserver<GreetingResponse>() {
             @Override
-            public void onNext(GreetResponse response) {
+            public void onNext(GreetingResponse response) {
                 System.out.println(response.getResult());
             }
 
@@ -85,7 +85,7 @@ public class GreetingClient {
         });
 
         Arrays.asList("Clement", "Marie", "Test").forEach(name ->
-            stream.onNext(GreetRequest.newBuilder().setFirstName(name).build())
+            stream.onNext(GreetingRequest.newBuilder().setFirstName(name).build())
         );
 
         stream.onCompleted();
@@ -95,14 +95,14 @@ public class GreetingClient {
 
     private static void doGreetWithDeadline(ManagedChannel channel) {
         System.out.println("Enter doGreetWithDeadline");
-        GreetServiceGrpc.GreetServiceBlockingStub stub = GreetServiceGrpc.newBlockingStub(channel);
-        GreetResponse response = stub.withDeadline(Deadline.after(3, TimeUnit.SECONDS))
-                .greetWithDeadline(GreetRequest.newBuilder().setFirstName("Clement").setLastName("Jean").build());
+        GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);
+        GreetingResponse response = stub.withDeadline(Deadline.after(3, TimeUnit.SECONDS))
+                .greetWithDeadline(GreetingRequest.newBuilder().setFirstName("Clement").build());
 
         System.out.println("Greeting within deadline: " + response.getResult());
 
         response = stub.withDeadline(Deadline.after(100, TimeUnit.MILLISECONDS))
-                .greetWithDeadline(GreetRequest.newBuilder().setFirstName("Clement").setLastName("Jean").build());
+                .greetWithDeadline(GreetingRequest.newBuilder().setFirstName("Clement").build());
 
         System.out.println("Greeting deadline exceeded: " + response.getResult());
     }
@@ -110,6 +110,7 @@ public class GreetingClient {
     public static void main(String[] args) throws InterruptedException {
         if (args.length == 0) {
             System.out.println("Need one argument to work");
+            return;
         }
 
         ManagedChannel channel = ManagedChannelBuilder

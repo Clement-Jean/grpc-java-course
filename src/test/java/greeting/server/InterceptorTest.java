@@ -1,8 +1,8 @@
 package greeting.server;
 
-import com.proto.greet.GreetRequest;
-import com.proto.greet.GreetResponse;
-import com.proto.greet.GreetServiceGrpc;
+import com.proto.greeting.GreetingRequest;
+import com.proto.greeting.GreetingResponse;
+import com.proto.greeting.GreetingServiceGrpc;
 import greeting.client.AddHeaderInterceptor;
 import io.grpc.*;
 import io.grpc.inprocess.InProcessChannelBuilder;
@@ -33,9 +33,9 @@ public class InterceptorTest {
                 .intercept(new AddHeaderInterceptor())
                 .build();
 
-        GreetServiceGrpc.GreetServiceBlockingStub blockingStub = GreetServiceGrpc.newBlockingStub(channel);
+        GreetingServiceGrpc.GreetingServiceBlockingStub blockingStub = GreetingServiceGrpc.newBlockingStub(channel);
 
-        GreetResponse response = blockingStub.greet(GreetRequest.newBuilder().setFirstName("Clement").build());
+        GreetingResponse response = blockingStub.greet(GreetingRequest.newBuilder().setFirstName("Clement").build());
 
         assertEquals("Hello Clement", response.getResult());
         if (!server.isShutdown())
@@ -61,10 +61,10 @@ public class InterceptorTest {
                 .usePlaintext()
                 .build();
 
-        GreetServiceGrpc.GreetServiceBlockingStub blockingStub = GreetServiceGrpc.newBlockingStub(channel);
+        GreetingServiceGrpc.GreetingServiceBlockingStub blockingStub = GreetingServiceGrpc.newBlockingStub(channel);
 
         try {
-            blockingStub.greet(GreetRequest.newBuilder().setFirstName("Clement").build());
+            blockingStub.greet(GreetingRequest.newBuilder().setFirstName("Clement").build());
             fail("There should be an error in this case");
         } catch (StatusRuntimeException e) {
             Status status = Status.fromThrowable(e);

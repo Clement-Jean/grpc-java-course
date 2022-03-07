@@ -1,34 +1,36 @@
 package greeting.server;
 
-import com.proto.greet.GreetRequest;
-import com.proto.greet.GreetResponse;
-import com.proto.greet.GreetServiceGrpc;
+import com.proto.greeting.GreetingRequest;
+import com.proto.greeting.GreetingResponse;
+import com.proto.greeting.GreetingServiceGrpc;
 import io.grpc.Context;
 import io.grpc.stub.StreamObserver;
 
-public class GreetingServiceImpl extends GreetServiceGrpc.GreetServiceImplBase {
+public class GreetingServiceImpl extends GreetingServiceGrpc.GreetingServiceImplBase {
     @Override
-    public void greet(GreetRequest request, StreamObserver<GreetResponse> responseObserver) {
-        responseObserver.onNext(GreetResponse.newBuilder().setResult("Hello " + request.getFirstName()).build());
+    public void greet(GreetingRequest request, StreamObserver<GreetingResponse> responseObserver) {
+        responseObserver.onNext(GreetingResponse.newBuilder().setResult("Hello " + request.getFirstName()).build());
         responseObserver.onCompleted();
     }
 
     @Override
-    public void greetManyTimes(GreetRequest request, StreamObserver<GreetResponse> responseObserver) {
+    public void greetManyTimes(GreetingRequest request, StreamObserver<GreetingResponse> responseObserver) {
+        GreetingResponse response = GreetingResponse.newBuilder().setResult("Hello " + request.getFirstName()).build();
+
         for (int i = 0; i < 10; ++i) {
-            responseObserver.onNext(GreetResponse.newBuilder().setResult("Hello " + request.getFirstName()).build());
+            responseObserver.onNext(response);
         }
 
         responseObserver.onCompleted();
     }
 
     @Override
-    public StreamObserver<GreetRequest> longGreet(StreamObserver<GreetResponse> responseObserver) {
+    public StreamObserver<GreetingRequest> longGreet(StreamObserver<GreetingResponse> responseObserver) {
         StringBuilder sb = new StringBuilder();
 
-        return new StreamObserver<GreetRequest>() {
+        return new StreamObserver<GreetingRequest>() {
             @Override
-            public void onNext(GreetRequest request) {
+            public void onNext(GreetingRequest request) {
                 sb.append("Hello ")
                   .append(request.getFirstName())
                   .append("!\n");
@@ -41,18 +43,18 @@ public class GreetingServiceImpl extends GreetServiceGrpc.GreetServiceImplBase {
 
             @Override
             public void onCompleted() {
-                responseObserver.onNext(GreetResponse.newBuilder().setResult(sb.toString()).build());
+                responseObserver.onNext(GreetingResponse.newBuilder().setResult(sb.toString()).build());
                 responseObserver.onCompleted();
             }
         };
     }
 
     @Override
-    public StreamObserver<GreetRequest> greetEveryone(StreamObserver<GreetResponse> responseObserver) {
-        return new StreamObserver<GreetRequest>() {
+    public StreamObserver<GreetingRequest> greetEveryone(StreamObserver<GreetingResponse> responseObserver) {
+        return new StreamObserver<GreetingRequest>() {
             @Override
-            public void onNext(GreetRequest request) {
-                responseObserver.onNext(GreetResponse.newBuilder().setResult("Hello " + request.getFirstName()).build());
+            public void onNext(GreetingRequest request) {
+                responseObserver.onNext(GreetingResponse.newBuilder().setResult("Hello " + request.getFirstName()).build());
             }
 
             @Override
@@ -68,7 +70,7 @@ public class GreetingServiceImpl extends GreetServiceGrpc.GreetServiceImplBase {
     }
 
     @Override
-    public void greetWithDeadline(GreetRequest request, StreamObserver<GreetResponse> responseObserver) {
+    public void greetWithDeadline(GreetingRequest request, StreamObserver<GreetingResponse> responseObserver) {
         Context current = Context.current();
 
         try {
@@ -79,7 +81,7 @@ public class GreetingServiceImpl extends GreetServiceGrpc.GreetServiceImplBase {
                 Thread.sleep(100);
             }
 
-            responseObserver.onNext(GreetResponse.newBuilder().setResult("Hello " + request.getFirstName()).build());
+            responseObserver.onNext(GreetingResponse.newBuilder().setResult("Hello " + request.getFirstName()).build());
             responseObserver.onCompleted();
         } catch (InterruptedException e) {
             responseObserver.onError(e);

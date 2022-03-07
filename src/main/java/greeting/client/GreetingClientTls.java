@@ -1,8 +1,8 @@
 package greeting.client;
 
-import com.proto.greet.GreetRequest;
-import com.proto.greet.GreetResponse;
-import com.proto.greet.GreetServiceGrpc;
+import com.proto.greeting.GreetingRequest;
+import com.proto.greeting.GreetingResponse;
+import com.proto.greeting.GreetingServiceGrpc;
 import io.grpc.*;
 
 import java.io.File;
@@ -11,8 +11,8 @@ import java.io.IOException;
 public class GreetingClientTls {
     private static void doGreet(ManagedChannel channel) {
         System.out.println("Enter doGreet");
-        GreetServiceGrpc.GreetServiceBlockingStub stub = GreetServiceGrpc.newBlockingStub(channel);
-        GreetResponse response = stub.greet(GreetRequest.newBuilder().setFirstName("Clement").setLastName("Jean").build());
+        GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);
+        GreetingResponse response = stub.greet(GreetingRequest.newBuilder().setFirstName("Clement").build());
 
         System.out.println("Greeting: " + response.getResult());
     }

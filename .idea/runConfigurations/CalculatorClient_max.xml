@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="CalculatorClient:max" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="calculator.client.CalculatorClient" />
+    <module name="grpc-java-course.main" />
+    <option name="PROGRAM_PARAMETERS" value="max" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

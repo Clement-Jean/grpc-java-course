@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="GreetingClient:greet_with_deadline" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="17" />
+    <option name="MAIN_CLASS_NAME" value="greeting.client.GreetingClient" />
+    <module name="grpc-java-course.main" />
+    <option name="PROGRAM_PARAMETERS" value="greet_with_deadline" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

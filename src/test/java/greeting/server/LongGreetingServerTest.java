@@ -1,8 +1,8 @@
 package greeting.server;
 
-import com.proto.greet.GreetRequest;
-import com.proto.greet.GreetResponse;
-import com.proto.greet.GreetServiceGrpc;
+import com.proto.greeting.GreetingRequest;
+import com.proto.greeting.GreetingResponse;
+import com.proto.greeting.GreetingServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.Test;
 import utils.ServerTestBase;
@@ -13,33 +13,32 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GreetEveryoneServerTest extends ServerTestBase<GreetServiceGrpc.GreetServiceBlockingStub, GreetServiceGrpc.GreetServiceStub> {
+public class LongGreetingServerTest extends ServerTestBase<GreetingServiceGrpc.GreetingServiceBlockingStub, GreetingServiceGrpc.GreetingServiceStub> {
 
-    private final List<String> finalResult = new ArrayList<String>();
+    private String finalResult = "";
 
     @Nullable
     private Throwable error = null;
 
-    GreetEveryoneServerTest() {
+    LongGreetingServerTest() {
         addService(new GreetingServiceImpl());
-        setAsyncStubInstantiator(GreetServiceGrpc::newStub);
+        setAsyncStubInstantiator(GreetingServiceGrpc::newStub);
     }
 
     @Test
-    void greetEveryoneImplReplyMessage() throws InterruptedException {
+    void longGreetImplReplyMessage() throws InterruptedException {
         List<String> names = new ArrayList<String>();
         CountDownLatch latch = new CountDownLatch(1);
 
         Collections.addAll(names, "Clement", "Marie", "Test");
 
-        StreamObserver<GreetRequest> stream = asyncStub.greetEveryone(new StreamObserver<GreetResponse>() {
+        StreamObserver<GreetingRequest> stream = asyncStub.longGreet(new StreamObserver<GreetingResponse>() {
             @Override
-            public void onNext(GreetResponse response) {
-                finalResult.add(response.getResult());
+            public void onNext(GreetingResponse response) {
+                finalResult = response.getResult();
             }
 
             @Override
@@ -54,7 +53,7 @@ public class GreetEveryoneServerTest extends ServerTestBase<GreetServiceGrpc.Gre
         });
 
         for (String name: names) {
-            stream.onNext(GreetRequest.newBuilder().setFirstName(name).build());
+            stream.onNext(GreetingRequest.newBuilder().setFirstName(name).build());
         }
 
         stream.onCompleted();
@@ -62,7 +61,7 @@ public class GreetEveryoneServerTest extends ServerTestBase<GreetServiceGrpc.Gre
         boolean reachedZero = latch.await(3, TimeUnit.SECONDS);
 
         assertTrue(reachedZero);
-        assertEquals(finalResult, names.stream().map(name -> "Hello " + name).collect(Collectors.toList()));
+        assertEquals("Hello Clement!\nHello Marie!\nHello Test!\n", finalResult);
         assertNull(error);
     }
 }

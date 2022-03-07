@@ -1,8 +1,8 @@
 package greeting.server;
 
-import com.proto.greet.GreetRequest;
-import com.proto.greet.GreetResponse;
-import com.proto.greet.GreetServiceGrpc;
+import com.proto.greeting.GreetingRequest;
+import com.proto.greeting.GreetingResponse;
+import com.proto.greeting.GreetingServiceGrpc;
 import io.grpc.Deadline;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -14,19 +14,19 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class GreetWithDeadlineTest extends ServerTestBase<
-    GreetServiceGrpc.GreetServiceBlockingStub,
-    GreetServiceGrpc.GreetServiceStub
+public class GreetingWithDeadlineTest extends ServerTestBase<
+    GreetingServiceGrpc.GreetingServiceBlockingStub,
+    GreetingServiceGrpc.GreetingServiceStub
 > {
-    GreetWithDeadlineTest() {
+    GreetingWithDeadlineTest() {
         addService(new GreetingServiceImpl());
-        setBlockingStubInstantiator(GreetServiceGrpc::newBlockingStub);
+        setBlockingStubInstantiator(GreetingServiceGrpc::newBlockingStub);
     }
 
     @Test
     void greetTest() {
-        GreetResponse response = blockingStub.withDeadline(Deadline.after(3, TimeUnit.SECONDS))
-                .greetWithDeadline(GreetRequest.newBuilder().setFirstName("Clement").setLastName("Jean").build());
+        GreetingResponse response = blockingStub.withDeadline(Deadline.after(3, TimeUnit.SECONDS))
+                .greetWithDeadline(GreetingRequest.newBuilder().setFirstName("Clement").build());
 
         assertEquals("Hello Clement", response.getResult());
     }
@@ -36,7 +36,7 @@ public class GreetWithDeadlineTest extends ServerTestBase<
     void greetDeadlineExceededTest() {
         try {
             blockingStub.withDeadline(Deadline.after(100, TimeUnit.MILLISECONDS))
-                    .greetWithDeadline(GreetRequest.newBuilder().setFirstName("Clement").setLastName("Jean").build());
+                    .greetWithDeadline(GreetingRequest.newBuilder().setFirstName("Clement").build());
             fail("There should be an error in this case");
         } catch (StatusRuntimeException e) {
             Status status = Status.fromThrowable(e);

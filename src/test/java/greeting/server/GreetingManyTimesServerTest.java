@@ -1,7 +1,7 @@
 package greeting.server;
 
-import com.proto.greet.GreetRequest;
-import com.proto.greet.GreetServiceGrpc;
+import com.proto.greeting.GreetingRequest;
+import com.proto.greeting.GreetingServiceGrpc;
 import org.junit.jupiter.api.Test;
 import utils.ServerTestBase;
 
@@ -9,18 +9,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GreetManyTimesServerTest extends ServerTestBase<GreetServiceGrpc.GreetServiceBlockingStub, GreetServiceGrpc.GreetServiceStub> {
+public class GreetingManyTimesServerTest extends ServerTestBase<GreetingServiceGrpc.GreetingServiceBlockingStub, GreetingServiceGrpc.GreetingServiceStub> {
 
-    GreetManyTimesServerTest() {
+    GreetingManyTimesServerTest() {
         addService(new GreetingServiceImpl());
-        setBlockingStubInstantiator(GreetServiceGrpc::newBlockingStub);
+        setBlockingStubInstantiator(GreetingServiceGrpc::newBlockingStub);
     }
 
     @Test
     void greetManyTimesImplReplyMessage() {
         AtomicInteger count = new AtomicInteger();
 
-        blockingStub.greetManyTimes(GreetRequest.newBuilder().setFirstName("Clement").build()).forEachRemaining(response -> {
+        blockingStub.greetManyTimes(GreetingRequest.newBuilder().setFirstName("Clement").build()).forEachRemaining(response -> {
             assertEquals("Hello Clement", response.getResult());
             count.incrementAndGet();
         });

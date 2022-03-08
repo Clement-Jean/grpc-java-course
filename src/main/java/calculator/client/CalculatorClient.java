@@ -91,9 +91,13 @@ public class CalculatorClient {
 
         System.out.println("Sqrt 25 = " + response.getResult());
 
-        response = stub.sqrt(SqrtRequest.newBuilder().setNumber(-1).build());
-
-        System.out.println("Sqrt -1 = " + response.getResult());
+        try {
+            response = stub.sqrt(SqrtRequest.newBuilder().setNumber(-1).build());
+            System.out.println("Sqrt -1 = " + response.getResult());
+        } catch (RuntimeException e) {
+            System.out.println("Got an exception for sqrt");
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) throws InterruptedException {

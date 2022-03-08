@@ -11,11 +11,11 @@ public class GreetingServer {
         int port = 50051;
 
         Server server = ServerBuilder.forPort(port)
-                .addService(new GreetingServiceImpl())
-                .addService(ProtoReflectionService.newInstance())
-                .intercept(new LogInterceptor())
-                .intercept(new HeaderCheckInterceptor())
-                .build();
+            .addService(new GreetingServiceImpl())
+            .addService(ProtoReflectionService.newInstance())
+            .intercept(new LogInterceptor())
+            .intercept(new HeaderCheckInterceptor())
+            .build();
 
         server.start();
         System.out.println("Server Started");

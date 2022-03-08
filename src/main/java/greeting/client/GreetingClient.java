@@ -6,10 +6,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -34,11 +31,7 @@ public class GreetingClient {
     private static void doLongGreet(ManagedChannel channel) throws InterruptedException {
         System.out.println("Enter doLongGreet");
         GreetingServiceGrpc.GreetingServiceStub stub = GreetingServiceGrpc.newStub(channel);
-
-        List<String> names = new ArrayList<String>();
         CountDownLatch latch = new CountDownLatch(1);
-
-        Collections.addAll(names, "Clement", "Marie", "Test");
 
         StreamObserver<GreetingRequest> stream = stub.longGreet(new StreamObserver<GreetingResponse>() {
             @Override
@@ -55,9 +48,9 @@ public class GreetingClient {
             }
         });
 
-        for (String name: names) {
-            stream.onNext(GreetingRequest.newBuilder().setFirstName(name).build());
-        }
+        Arrays.asList("Clement", "Marie", "Test").forEach(name ->
+            stream.onNext(GreetingRequest.newBuilder().setFirstName(name).build())
+        );
 
         stream.onCompleted();
 

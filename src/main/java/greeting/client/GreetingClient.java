@@ -1,9 +1,7 @@
 package greeting.client;
 
 import com.proto.greeting.*;
-import io.grpc.Deadline;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+import io.grpc.*;
 import io.grpc.stub.StreamObserver;
 
 import java.util.Arrays;
@@ -94,10 +92,19 @@ public class GreetingClient {
 
         System.out.println("Greeting within deadline: " + response.getResult());
 
-        response = stub.withDeadline(Deadline.after(100, TimeUnit.MILLISECONDS))
-                .greetWithDeadline(GreetingRequest.newBuilder().setFirstName("Clement").build());
+        try {
+            response = stub.withDeadline(Deadline.after(100, TimeUnit.MILLISECONDS))
+                    .greetWithDeadline(GreetingRequest.newBuilder().setFirstName("Clement").build());
 
-        System.out.println("Greeting deadline exceeded: " + response.getResult());
+            System.out.println("Greeting deadline exceeded: " + response.getResult());
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus().getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                System.out.println("Deadline has been exceeded");
+            } else {
+                System.out.println("Got an exception in greetWithDeadline");
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void main(String[] args) throws InterruptedException {

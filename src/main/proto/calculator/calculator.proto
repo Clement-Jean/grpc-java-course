@@ -16,5 +16,7 @@ service CalculatorService {
   rpc primes(PrimeRequest) returns (stream PrimeResponse);
   rpc avg(stream AvgRequest) returns (AvgResponse);
   rpc max(stream MaxRequest) returns (stream MaxResponse);
+
+  // Returns a Status.INVALID_ARGUMENT if the SqrtRequest.number is negative
   rpc sqrt(SqrtRequest) returns (SqrtResponse);
 }

@@ -10,7 +10,9 @@ public class CalculatorServer {
     public static void main(String[] args) throws IOException, InterruptedException {
         int port = 50052;
 
-        Server server = ServerBuilder.forPort(port).addService(new CalculatorServiceImpl()).build();
+        Server server = ServerBuilder.forPort(port)
+            .addService(new CalculatorServiceImpl())
+            .build();
 
         server.start();
         System.out.println("Server Started");

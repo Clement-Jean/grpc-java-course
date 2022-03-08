@@ -8,7 +8,7 @@ public class CalculatorServiceImpl extends CalculatorServiceGrpc.CalculatorServi
     @Override
     public void sum(SumRequest request, StreamObserver<SumResponse> responseObserver) {
         responseObserver.onNext(SumResponse.newBuilder().setResult(
-                request.getFirstNumber() + request.getSecondNumber()
+            request.getFirstNumber() + request.getSecondNumber()
         ).build());
         responseObserver.onCompleted();
     }
@@ -49,7 +49,9 @@ public class CalculatorServiceImpl extends CalculatorServiceGrpc.CalculatorServi
 
             @Override
             public void onCompleted() {
-                responseObserver.onNext(AvgResponse.newBuilder().setResult((double) sum / count).build());
+                responseObserver.onNext(AvgResponse.newBuilder().setResult(
+                    (double) sum / count
+                ).build());
                 responseObserver.onCompleted();
             }
         };

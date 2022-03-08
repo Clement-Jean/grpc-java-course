@@ -63,7 +63,7 @@ public class CalculatorClient {
         StreamObserver<MaxRequest> stream = stub.max(new StreamObserver<MaxResponse>() {
             @Override
             public void onNext(MaxResponse response) {
-                System.out.println(response.getMax());
+                System.out.println("Max = " + response.getMax());
             }
 
             @Override
@@ -87,7 +87,11 @@ public class CalculatorClient {
     private static void doSqrt(ManagedChannel channel) {
         System.out.println("Enter doSqrt");
         CalculatorServiceGrpc.CalculatorServiceBlockingStub stub = CalculatorServiceGrpc.newBlockingStub(channel);
-        SqrtResponse response = stub.sqrt(SqrtRequest.newBuilder().setNumber(-1).build());
+        SqrtResponse response = stub.sqrt(SqrtRequest.newBuilder().setNumber(25).build());
+
+        System.out.println("Sqrt 25 = " + response.getResult());
+
+        response = stub.sqrt(SqrtRequest.newBuilder().setNumber(-1).build());
 
         System.out.println("Sqrt -1 = " + response.getResult());
     }
@@ -95,9 +99,12 @@ public class CalculatorClient {
     public static void main(String[] args) throws InterruptedException {
         if (args.length == 0) {
             System.out.println("Need one argument to work");
+            return;
         }
 
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50052).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50052)
+            .usePlaintext()
+            .build();
 
         switch (args[0]) {
             case "sum": doSum(channel); break;

@@ -1,4 +1,4 @@
-name: Unit Tests
+name: unit tests
 
 on:
   push:
@@ -26,7 +26,7 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
         with:
-          arguments: build
+          arguments: build -x test
 
   codecov:
 
@@ -41,6 +41,7 @@ jobs:
         uses: cicirello/jacoco-badge-generator@v2
         with:
           jacoco-csv-file: build/reports/jacoco/jacoco.csv
+          coverage-label: server-side coverage
 
       - name: Commit the badge (if it changed)
         run: |

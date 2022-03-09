@@ -30,14 +30,14 @@ protobuf {
 sourceSets.main.java.srcDir new File(buildDir, 'generated/source')
 
 dependencies {
-    implementation 'junit:junit:4.13.1'
-    runtimeOnly 'io.grpc:grpc-netty-shaded:1.44.0'
-    implementation 'io.grpc:grpc-protobuf:1.44.0'
-    implementation 'io.grpc:grpc-stub:1.44.0'
-    implementation 'io.grpc:grpc-services:1.44.0'
+    implementation 'junit:junit:4.13.2'
+    runtimeOnly 'io.grpc:grpc-netty-shaded:1.44.1'
+    implementation 'io.grpc:grpc-protobuf:1.44.1'
+    implementation 'io.grpc:grpc-stub:1.44.1'
+    implementation 'io.grpc:grpc-services:1.44.1'
     compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
 
-    implementation 'org.mongodb:mongodb-driver-sync:4.4.1'
+    implementation 'org.mongodb:mongodb-driver-sync:4.5.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'

@@ -28,6 +28,12 @@ jobs:
         with:
           arguments: build
 
+  codecov:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
       - name: Run Test Coverage
         run: ./gradlew jacocoTestReport
 

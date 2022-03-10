@@ -68,7 +68,7 @@ public class BlogCreateTest extends ServerTestBase<
 
     @Test
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    void createFailTest() {
+    void createUnacknowledgedTest() {
         String author = "Clement";
         String title = "My Blog";
         String content = "This is a cool blog";
@@ -86,6 +86,36 @@ public class BlogCreateTest extends ServerTestBase<
                         .setTitle(title)
                         .setContent(content)
                         .build()
+            );
+            fail("There should be an error in this case");
+        } catch (StatusRuntimeException e) {
+            Status status = Status.fromThrowable(e);
+
+            assertEquals(Status.Code.ABORTED, status.getCode());
+            assertEquals(BlogServiceImpl.BLOG_COULDNT_BE_CREATED, status.getDescription());
+        }
+    }
+
+    @Test
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    void createNullIdTest() {
+        String author = "Clement";
+        String title = "My Blog";
+        String content = "This is a cool blog";
+
+        Document blog = new Document()
+                .append("author_id", author)
+                .append("title", title)
+                .append("content", content);
+
+        when(mockCollection.insertOne(blog)).thenReturn(InsertOneResult.acknowledged(null));
+
+        try {
+            blockingStub.createBlog(
+                    Blog.newBuilder().setAuthorId(author)
+                            .setTitle(title)
+                            .setContent(content)
+                            .build()
             );
             fail("There should be an error in this case");
         } catch (StatusRuntimeException e) {

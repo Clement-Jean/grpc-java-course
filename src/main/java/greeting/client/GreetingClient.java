@@ -87,14 +87,15 @@ public class GreetingClient {
     private static void doGreetWithDeadline(ManagedChannel channel) {
         System.out.println("Enter doGreetWithDeadline");
         GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);
+        GreetingRequest request = GreetingRequest.newBuilder().setFirstName("Clement").build();
         GreetingResponse response = stub.withDeadline(Deadline.after(3, TimeUnit.SECONDS))
-                .greetWithDeadline(GreetingRequest.newBuilder().setFirstName("Clement").build());
+                .greetWithDeadline(request);
 
         System.out.println("Greeting within deadline: " + response.getResult());
 
         try {
             response = stub.withDeadline(Deadline.after(100, TimeUnit.MILLISECONDS))
-                    .greetWithDeadline(GreetingRequest.newBuilder().setFirstName("Clement").build());
+                    .greetWithDeadline(request);
 
             System.out.println("Greeting deadline exceeded: " + response.getResult());
         } catch (StatusRuntimeException e) {

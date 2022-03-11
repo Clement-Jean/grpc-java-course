@@ -8,11 +8,9 @@ import org.junit.jupiter.api.Test;
 import utils.ServerTestBase;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,10 +30,7 @@ public class CalculatorAvgTest extends ServerTestBase<
 
     @Test
     void avgTest() throws InterruptedException {
-        List<Integer> numbers = new ArrayList<Integer>();
         CountDownLatch latch = new CountDownLatch(1);
-
-        Collections.addAll(numbers, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
         StreamObserver<AvgRequest> stream = asyncStub.avg(new StreamObserver<AvgResponse>() {
             @Override
@@ -54,9 +49,9 @@ public class CalculatorAvgTest extends ServerTestBase<
             }
         });
 
-        for (Integer number : numbers) {
-            stream.onNext(AvgRequest.newBuilder().setNumber(number).build());
-        }
+        IntStream.range(1, 11).forEach(number ->
+            stream.onNext(AvgRequest.newBuilder().setNumber(number).build())
+        );
 
         stream.onCompleted();
 

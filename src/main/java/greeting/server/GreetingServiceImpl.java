@@ -6,7 +6,7 @@ import com.proto.greeting.GreetingServiceGrpc;
 import io.grpc.Context;
 import io.grpc.stub.StreamObserver;
 
-public class GreetingServiceImpl extends GreetingServiceGrpc.GreetingServiceImplBase {
+public final class GreetingServiceImpl extends GreetingServiceGrpc.GreetingServiceImplBase {
     @Override
     public void greet(GreetingRequest request, StreamObserver<GreetingResponse> responseObserver) {
         responseObserver.onNext(GreetingResponse.newBuilder().setResult("Hello " + request.getFirstName()).build());

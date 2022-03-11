@@ -3,7 +3,7 @@ package greeting.server;
 import com.google.common.annotations.VisibleForTesting;
 import io.grpc.*;
 
-public class HeaderCheckInterceptor implements ServerInterceptor {
+public final class HeaderCheckInterceptor implements ServerInterceptor {
 
     @VisibleForTesting
     public static final Metadata.Key<String> CUSTOM_HEADER_KEY =

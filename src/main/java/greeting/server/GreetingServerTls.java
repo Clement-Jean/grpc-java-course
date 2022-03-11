@@ -6,7 +6,7 @@ import io.grpc.ServerBuilder;
 import java.io.File;
 import java.io.IOException;
 
-public class GreetingServerTls {
+public final class GreetingServerTls {
     public static void main(String[] args) throws IOException, InterruptedException {
         int port = 50051;
 

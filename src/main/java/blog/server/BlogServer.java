@@ -7,7 +7,7 @@ import io.grpc.ServerBuilder;
 
 import java.io.IOException;
 
-public class BlogServer {
+public final class BlogServer {
     public static void main(String[] args) throws InterruptedException, IOException {
         int port = 50051;
 

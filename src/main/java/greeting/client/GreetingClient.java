@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public class GreetingClient {
+public final class GreetingClient {
     private static void doGreet(ManagedChannel channel) {
         System.out.println("Enter doGreet");
         GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);

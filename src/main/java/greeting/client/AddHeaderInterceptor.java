@@ -4,7 +4,7 @@ import io.grpc.*;
 
 import static greeting.server.HeaderCheckInterceptor.CUSTOM_HEADER_KEY;
 
-public class AddHeaderInterceptor implements ClientInterceptor {
+public final class AddHeaderInterceptor implements ClientInterceptor {
     @Override
     public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
         return new ForwardingClientCall.SimpleForwardingClientCall<ReqT, RespT>(next.newCall(method, callOptions)) {

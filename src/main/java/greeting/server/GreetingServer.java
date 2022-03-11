@@ -6,7 +6,7 @@ import io.grpc.protobuf.services.ProtoReflectionService;
 
 import java.io.IOException;
 
-public class GreetingServer {
+public final class GreetingServer {
     public static void main(String[] args) throws IOException, InterruptedException {
         int port = 50051;
 

@@ -5,7 +5,7 @@ import io.grpc.ServerBuilder;
 
 import java.io.IOException;
 
-public class CalculatorServer {
+public final class CalculatorServer {
     public static void main(String[] args) throws IOException, InterruptedException {
         int port = 50052;
 

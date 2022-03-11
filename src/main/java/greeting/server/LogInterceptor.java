@@ -2,7 +2,7 @@ package greeting.server;
 
 import io.grpc.*;
 
-public class LogInterceptor implements ServerInterceptor {
+public final class LogInterceptor implements ServerInterceptor {
     @Override
     public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers, ServerCallHandler<ReqT, RespT> next) {
         return new ForwardingServerCallListener.SimpleForwardingServerCallListener<ReqT>(next.startCall(call, headers)) {

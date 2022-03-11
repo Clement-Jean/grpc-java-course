@@ -10,7 +10,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
-public class CalculatorClient {
+public final class CalculatorClient {
     private static void doSum(ManagedChannel channel) {
         System.out.println("Enter doSum");
         CalculatorServiceGrpc.CalculatorServiceBlockingStub stub = CalculatorServiceGrpc.newBlockingStub(channel);

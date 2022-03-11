@@ -8,7 +8,7 @@ import io.grpc.*;
 import java.io.File;
 import java.io.IOException;
 
-public class GreetingClientTls {
+public final class GreetingClientTls {
     private static void doGreet(ManagedChannel channel) {
         System.out.println("Enter doGreet");
         GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);

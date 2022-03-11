@@ -12,7 +12,9 @@ import utils.ExcludeFromJacocoGeneratedReport;
 
 import java.io.PrintStream;
 
-public class BlogClient {
+public final class BlogClient {
+
+    private BlogClient() {}
 
     @VisibleForTesting
     static BlogId createBlog(BlogServiceGrpc.BlogServiceBlockingStub stub) {

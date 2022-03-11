@@ -41,7 +41,6 @@ jobs:
         uses: cicirello/jacoco-badge-generator@v2
         with:
           jacoco-csv-file: build/reports/jacoco/jacoco.csv
-          coverage-label: server-side coverage
 
       - name: Commit the badge (if it changed)
         run: |

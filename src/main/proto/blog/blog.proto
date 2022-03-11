@@ -19,9 +19,29 @@ message BlogId {
 }
 
 service BlogService {
+  // Requests the creation for a Blog
+  // Returns Status.INTERNAL if the blog couldn't be created due to Db error
+  // Returns the created Blog's Id
   rpc createBlog(Blog) returns (BlogId);
+
+  // Requests access to the content of a Blog by sending an Id
+  // Returns Status.NOT_FOUND if the Id doesn't match any Blog in Db
+  // Returns Blog content
   rpc readBlog(BlogId) returns (Blog);
+
+  // Requests the update of a Blog in Db
+  // Returns Status.NOT_FOUND if the Id doesn't match any Blog in Db
+  // Returns Status.INTERNAL if the blog couldn't be updated due to Db error
+  // Returns the updated Blog
   rpc updateBlog(Blog) returns (Blog);
+
+  // Requests the delete of a Blog in Db by giving its Id
+  // Returns Status.NOT_FOUND if the Id doesn't match any Blog in Db
+  // Returns Status.INTERNAL if the blog couldn't be deleted due to Db error
+  // Returns the deleted Blog's Id
   rpc deleteBlog(BlogId) returns (BlogId);
+
+  // Requests access to all the Blogs in Db
+  // Returns stream of Blogs
   rpc listBlog(google.protobuf.Empty) returns (stream Blog);
 }

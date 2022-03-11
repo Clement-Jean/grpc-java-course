@@ -30,7 +30,7 @@ public class LongGreetingServerTest extends ServerTestBase<GreetingServiceGrpc.G
 
     @Test
     void longGreetImplReplyMessage() throws InterruptedException {
-        List<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
         CountDownLatch latch = new CountDownLatch(1);
 
         Collections.addAll(names, "Clement", "Marie", "Test");

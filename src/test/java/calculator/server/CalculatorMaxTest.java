@@ -20,7 +20,7 @@ public class CalculatorMaxTest extends ServerTestBase<
     CalculatorServiceGrpc.CalculatorServiceBlockingStub,
     CalculatorServiceGrpc.CalculatorServiceStub
 > {
-    private final List<Integer> finalResult = new ArrayList<Integer>();
+    private final List<Integer> finalResult = new ArrayList<>();
 
     @Nullable
     private Throwable error = null;
@@ -32,7 +32,7 @@ public class CalculatorMaxTest extends ServerTestBase<
 
     @Test
     void maxTest() throws InterruptedException {
-        List<Integer> numbers = new ArrayList<Integer>();
+        List<Integer> numbers = new ArrayList<>();
         CountDownLatch latch = new CountDownLatch(1);
 
         Collections.addAll(numbers, 1, 5, 3, 6, 2, 20);
@@ -61,7 +61,7 @@ public class CalculatorMaxTest extends ServerTestBase<
         stream.onCompleted();
 
         boolean reachedZero = latch.await(3, TimeUnit.SECONDS);
-        List<Integer> expected = new ArrayList<Integer>();
+        List<Integer> expected = new ArrayList<>();
 
         Collections.addAll(expected, 1, 5, 6, 20);
 

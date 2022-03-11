@@ -5,6 +5,7 @@ import com.google.protobuf.Empty;
 import com.mongodb.client.*;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.client.result.UpdateResult;
 import com.proto.blog.Blog;
 import com.proto.blog.BlogId;
 import com.proto.blog.BlogServiceGrpc;
@@ -19,6 +20,8 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
 
     @VisibleForTesting
     static final String BLOG_COULDNT_BE_CREATED = "The blog could not be created";
+    @VisibleForTesting
+    static final String BLOG_COULDNT_BE_UPDATED = "The blog could not be updated";
     @VisibleForTesting
     static final String BLOG_COULDNT_BE_DELETED = "The blog could not be deleted";
     @VisibleForTesting
@@ -35,8 +38,11 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
         return status.withDescription(message).asRuntimeException();
     }
 
+    @SuppressWarnings("SameParameterValue")
     private io.grpc.StatusRuntimeException error(Status status, String message, String augmentMessage) {
-        return status.withDescription(message).augmentDescription(augmentMessage).asRuntimeException();
+        return status.withDescription(message)
+                .augmentDescription(augmentMessage)
+                .asRuntimeException();
     }
 
     Blog documentToBlog(Document document){
@@ -60,7 +66,7 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
         InsertOneResult result = mongoCollection.insertOne(doc);
 
         if (!result.wasAcknowledged() || result.getInsertedId() == null) {
-            responseObserver.onError(error(Status.ABORTED, BLOG_COULDNT_BE_CREATED));
+            responseObserver.onError(error(Status.INTERNAL, BLOG_COULDNT_BE_CREATED));
             return;
         }
 
@@ -128,7 +134,12 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
 
         System.out.println("Replacing blog in database...");
 
-        mongoCollection.replaceOne(eq("_id", result.getObjectId("_id")), replacement);
+        UpdateResult updateResult = mongoCollection.replaceOne(eq("_id", result.getObjectId("_id")), replacement);
+
+        if (!updateResult.wasAcknowledged()) {
+            responseObserver.onError(error(Status.INTERNAL, BLOG_COULDNT_BE_UPDATED));
+            return;
+        }
 
         System.out.println("Replaced! Sending as a response");
         responseObserver.onNext(documentToBlog(replacement));

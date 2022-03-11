@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("rawtypes")
 public class ServerTestBase<BLOCKING_STUB extends AbstractBlockingStub, ASYNC_STUB extends AbstractAsyncStub> {
     private static final String serverName = "test";
 
@@ -24,7 +25,7 @@ public class ServerTestBase<BLOCKING_STUB extends AbstractBlockingStub, ASYNC_ST
     protected BLOCKING_STUB blockingStub = null;
     protected ASYNC_STUB asyncStub = null;
 
-    private final List<BindableService> services = new ArrayList<BindableService>();
+    private final List<BindableService> services = new ArrayList<>();
 
     protected void addService(BindableService service) {
         this.services.add(service);

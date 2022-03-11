@@ -49,11 +49,11 @@ public class BlogListTest extends ServerTestBase<
         String content = "This is a cool blog";
 
         Document blog1 = new Document("_id", new ObjectId("579397d20c2dd41b9a8a09eb"))
-                .append("author_id", author)
+                .append("author", author)
                 .append("title", title)
                 .append("content", content);
         Document blog2 = new Document("_id", new ObjectId("579397d20c2dd41b9a8a09ec"))
-                .append("author_id", author + "2")
+                .append("author", author + "2")
                 .append("title", title + "2")
                 .append("content", content + "2");
 
@@ -62,10 +62,10 @@ public class BlogListTest extends ServerTestBase<
         when(cursor.hasNext()).thenReturn(true, true, false);
         when(cursor.next()).thenReturn(blog1, blog2);
 
-        blockingStub.listBlog(com.google.protobuf.Empty.getDefaultInstance()).forEachRemaining(finalResult::add);
+        blockingStub.listBlogs(com.google.protobuf.Empty.getDefaultInstance()).forEachRemaining(finalResult::add);
 
         assertEquals(2, finalResult.size());
-        assertEquals(author, finalResult.get(0).getAuthorId());
-        assertEquals(author + "2", finalResult.get(1).getAuthorId());
+        assertEquals(author, finalResult.get(0).getAuthor());
+        assertEquals(author + "2", finalResult.get(1).getAuthor());
     }
 }

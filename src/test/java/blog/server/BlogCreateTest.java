@@ -23,8 +23,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class BlogCreateTest extends ServerTestBase<
-        BlogServiceGrpc.BlogServiceBlockingStub,
-        BlogServiceGrpc.BlogServiceStub
+    BlogServiceGrpc.BlogServiceBlockingStub,
+    BlogServiceGrpc.BlogServiceStub
 > {
 
     @Mock
@@ -50,14 +50,14 @@ public class BlogCreateTest extends ServerTestBase<
         String content = "This is a cool blog";
 
         Document blog = new Document()
-                .append("author_id", author)
+                .append("author", author)
                 .append("title", title)
                 .append("content", content);
 
         when(mockCollection.insertOne(blog)).thenReturn(InsertOneResult.acknowledged(new BsonObjectId(id)));
 
         BlogId blogId = blockingStub.createBlog(
-            Blog.newBuilder().setAuthorId(author)
+            Blog.newBuilder().setAuthor(author)
                     .setTitle(title)
                     .setContent(content)
                     .build()
@@ -74,7 +74,7 @@ public class BlogCreateTest extends ServerTestBase<
         String content = "This is a cool blog";
 
         Document blog = new Document()
-                .append("author_id", author)
+                .append("author", author)
                 .append("title", title)
                 .append("content", content);
 
@@ -82,7 +82,7 @@ public class BlogCreateTest extends ServerTestBase<
 
         try {
             blockingStub.createBlog(
-                Blog.newBuilder().setAuthorId(author)
+                Blog.newBuilder().setAuthor(author)
                         .setTitle(title)
                         .setContent(content)
                         .build()
@@ -104,7 +104,7 @@ public class BlogCreateTest extends ServerTestBase<
         String content = "This is a cool blog";
 
         Document blog = new Document()
-                .append("author_id", author)
+                .append("author", author)
                 .append("title", title)
                 .append("content", content);
 
@@ -112,7 +112,7 @@ public class BlogCreateTest extends ServerTestBase<
 
         try {
             blockingStub.createBlog(
-                    Blog.newBuilder().setAuthorId(author)
+                    Blog.newBuilder().setAuthor(author)
                             .setTitle(title)
                             .setContent(content)
                             .build()

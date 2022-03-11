@@ -45,11 +45,9 @@ public class BlogDeleteTest extends ServerTestBase<
 
         when(mockCollection.deleteOne(any(Bson.class))).thenReturn(DeleteResult.acknowledged(1));
 
-        BlogId b = blockingStub.deleteBlog(
+        assertDoesNotThrow(() -> blockingStub.deleteBlog(
             BlogId.newBuilder().setId(id).build()
-        );
-
-        assertEquals(id, b.getId());
+        ));
     }
 
     @Test

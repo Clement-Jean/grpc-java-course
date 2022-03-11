@@ -48,7 +48,7 @@ public class BlogReadTest extends ServerTestBase<
         String content = "This is a cool blog";
 
         Document blog = new Document("_id", oid)
-                .append("author_id", author)
+                .append("author", author)
                 .append("title", title)
                 .append("content", content);
 
@@ -58,7 +58,7 @@ public class BlogReadTest extends ServerTestBase<
         Blog b = blockingStub.readBlog(BlogId.newBuilder().setId(id).build());
 
         assertEquals(id, b.getId());
-        assertEquals(author, b.getAuthorId());
+        assertEquals(author, b.getAuthor());
         assertEquals(title, b.getTitle());
         assertEquals(content, b.getContent());
     }

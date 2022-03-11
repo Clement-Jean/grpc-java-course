@@ -47,7 +47,7 @@ public class BlogUpdateTest extends ServerTestBase<
         String title = "My Blog";
         String content = "This is a cool blog";
         Document blog = new Document("_id", oid)
-                .append("author_id", author + "_old")
+                .append("author", author + "_old")
                 .append("title", title + "_old")
                 .append("content", content + "_old");
 
@@ -56,19 +56,14 @@ public class BlogUpdateTest extends ServerTestBase<
         when(mockCollection.replaceOne(any(Bson.class), any(Document.class)))
                 .thenReturn(UpdateResult.acknowledged(1, null, null));
 
-        Blog b = blockingStub.updateBlog(
-            Blog.newBuilder()
-                .setId(id)
-                .setTitle(title)
-                .setAuthorId(author)
-                .setContent(content)
-                .build()
-        );
-
-        assertEquals(id, b.getId());
-        assertEquals(author, b.getAuthorId());
-        assertEquals(title, b.getTitle());
-        assertEquals(content, b.getContent());
+        assertDoesNotThrow(() -> blockingStub.updateBlog(
+                Blog.newBuilder()
+                        .setId(id)
+                        .setTitle(title)
+                        .setAuthor(author)
+                        .setContent(content)
+                        .build()
+        ));
     }
 
     @Test
@@ -80,7 +75,7 @@ public class BlogUpdateTest extends ServerTestBase<
         String title = "My Blog";
         String content = "This is a cool blog";
         Document blog = new Document("_id", oid)
-                .append("author_id", author + "_old")
+                .append("author", author + "_old")
                 .append("title", title + "_old")
                 .append("content", content + "_old");
 

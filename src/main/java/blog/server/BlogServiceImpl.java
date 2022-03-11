@@ -29,9 +29,9 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
 
     private final MongoCollection<Document> mongoCollection;
 
-    BlogServiceImpl(MongoClient mongoClient) {
-        MongoDatabase mongoDatabase = mongoClient.getDatabase("blogdb");
-        this.mongoCollection = mongoDatabase.getCollection("blog");
+    BlogServiceImpl(MongoClient client) {
+        MongoDatabase db = client.getDatabase("blogdb");
+        mongoCollection = db.getCollection("blog");
     }
 
     private io.grpc.StatusRuntimeException error(Status status, String message) {
@@ -41,26 +41,26 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
     @SuppressWarnings("SameParameterValue")
     private io.grpc.StatusRuntimeException error(Status status, String message, String augmentMessage) {
         return status.withDescription(message)
-                .augmentDescription(augmentMessage)
-                .asRuntimeException();
+            .augmentDescription(augmentMessage)
+            .asRuntimeException();
     }
 
-    Blog documentToBlog(Document document){
+    Blog documentToBlog(Document document) {
         return Blog.newBuilder()
-                .setAuthorId(document.getString("author_id"))
-                .setTitle(document.getString("title"))
-                .setContent(document.getString("content"))
-                .setId(document.getObjectId("_id").toString())
-                .build();
+            .setAuthor(document.getString("author"))
+            .setTitle(document.getString("title"))
+            .setContent(document.getString("content"))
+            .setId(document.getObjectId("_id").toString())
+            .build();
     }
 
     @Override
     public void createBlog(Blog request, StreamObserver<BlogId> responseObserver) {
         System.out.println("Received Create Blog request");
 
-        Document doc = new Document("author_id", request.getAuthorId())
-                .append("title", request.getTitle())
-                .append("content", request.getContent());
+        Document doc = new Document("author", request.getAuthor())
+            .append("title", request.getTitle())
+            .append("content", request.getContent());
 
         System.out.println("Inserting blog...");
         InsertOneResult result = mongoCollection.insertOne(doc);
@@ -73,9 +73,7 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
         String id = result.getInsertedId().asObjectId().getValue().toString();
         System.out.println("Inserted blog: " + id);
 
-        BlogId response = BlogId.newBuilder().setId(id).build();
-
-        responseObserver.onNext(response);
+        responseObserver.onNext(BlogId.newBuilder().setId(id).build());
         responseObserver.onCompleted();
     }
 
@@ -107,7 +105,7 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
     }
 
     @Override
-    public void updateBlog(Blog request, StreamObserver<Blog> responseObserver) {
+    public void updateBlog(Blog request, StreamObserver<Empty> responseObserver) {
         System.out.println("Received Update Blog request");
         String blogId = request.getId();
 
@@ -127,10 +125,10 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
             return;
         }
 
-        Document replacement = new Document("author_id", request.getAuthorId())
-                .append("title", request.getTitle())
-                .append("content", request.getContent())
-                .append("_id", new ObjectId(blogId));
+        Document replacement = new Document("author", request.getAuthor())
+            .append("title", request.getTitle())
+            .append("content", request.getContent())
+            .append("_id", new ObjectId(blogId));
 
         System.out.println("Replacing blog in database...");
 
@@ -142,12 +140,12 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
         }
 
         System.out.println("Replaced! Sending as a response");
-        responseObserver.onNext(documentToBlog(replacement));
+        responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
     }
 
     @Override
-    public void deleteBlog(BlogId request, StreamObserver<BlogId> responseObserver) {
+    public void deleteBlog(BlogId request, StreamObserver<Empty> responseObserver) {
         System.out.println("Received Delete Blog Request");
 
         DeleteResult result;
@@ -173,12 +171,12 @@ public class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
         }
 
         System.out.println("Blog was deleted");
-        responseObserver.onNext(request);
+        responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
     }
 
     @Override
-    public void listBlog(Empty request, StreamObserver<Blog> responseObserver) {
+    public void listBlogs(Empty request, StreamObserver<Blog> responseObserver) {
         System.out.println("Received List Blog Request");
 
         for (Document document : mongoCollection.find()) {

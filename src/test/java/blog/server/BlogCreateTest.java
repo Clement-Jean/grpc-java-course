@@ -91,7 +91,7 @@ public class BlogCreateTest extends ServerTestBase<
         } catch (StatusRuntimeException e) {
             Status status = Status.fromThrowable(e);
 
-            assertEquals(Status.Code.ABORTED, status.getCode());
+            assertEquals(Status.Code.INTERNAL, status.getCode());
             assertEquals(BlogServiceImpl.BLOG_COULDNT_BE_CREATED, status.getDescription());
         }
     }
@@ -121,7 +121,7 @@ public class BlogCreateTest extends ServerTestBase<
         } catch (StatusRuntimeException e) {
             Status status = Status.fromThrowable(e);
 
-            assertEquals(Status.Code.ABORTED, status.getCode());
+            assertEquals(Status.Code.INTERNAL, status.getCode());
             assertEquals(BlogServiceImpl.BLOG_COULDNT_BE_CREATED, status.getDescription());
         }
     }

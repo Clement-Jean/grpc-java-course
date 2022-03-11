@@ -1,11 +1,9 @@
 package blog.server;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
 import com.proto.blog.Blog;
 import com.proto.blog.BlogServiceGrpc;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -17,7 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 public class BlogListTest extends ServerTestBase<
         BlogServiceGrpc.BlogServiceBlockingStub,
@@ -29,8 +27,12 @@ public class BlogListTest extends ServerTestBase<
     private MongoCollection<Document> mockCollection;
     @Mock
     private MongoDatabase mockDB;
+    @Mock
+    private FindIterable<Document> iterable;
+    @Mock
+    private MongoCursor<Document> cursor;
 
-    private final List<Blog> finalResult = new ArrayList<Blog>();
+    private final List<Blog> finalResult = new ArrayList<>();
 
     BlogListTest() {
         MockitoAnnotations.openMocks(this);
@@ -41,11 +43,7 @@ public class BlogListTest extends ServerTestBase<
     }
 
     @Test
-    @SuppressWarnings("rawtypes")
     void listTest() {
-        FindIterable iterable = mock(FindIterable.class);
-        MongoCursor cursor = mock(MongoCursor.class);
-
         String author = "Clement";
         String title = "My Blog";
         String content = "This is a cool blog";

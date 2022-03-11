@@ -15,8 +15,6 @@ import org.mockito.MockitoAnnotations;
 import utils.ServerTestBase;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class BlogReadTest extends ServerTestBase<
@@ -30,6 +28,8 @@ public class BlogReadTest extends ServerTestBase<
     private MongoCollection<Document> mockCollection;
     @Mock
     private MongoDatabase mockDB;
+    @Mock
+    private FindIterable<Document> iterable;
 
     BlogReadTest() {
         MockitoAnnotations.openMocks(this);
@@ -40,10 +40,7 @@ public class BlogReadTest extends ServerTestBase<
     }
 
     @Test
-    @SuppressWarnings("rawtypes")
     void readTest() {
-        FindIterable iterable = mock(FindIterable.class);
-
         String id = "579397d20c2dd41b9a8a09eb";
         ObjectId oid = new ObjectId(id);
         String author = "Clement";
@@ -67,10 +64,8 @@ public class BlogReadTest extends ServerTestBase<
     }
 
     @Test
-    @SuppressWarnings({"rawtypes", "ResultOfMethodCallIgnored"})
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     void readNotFoundTest() {
-        FindIterable iterable = mock(FindIterable.class);
-
         String id = "579397d20c2dd41b9a8a09eb";
 
         when(mockCollection.find(any(Bson.class))).thenReturn(iterable);

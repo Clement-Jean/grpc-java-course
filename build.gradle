@@ -70,6 +70,7 @@ jacocoTestReport {
                     "greeting/server/GreetingServiceImpl.class",
                     "calculator/server/CalculatorServiceImpl.class",
                     "blog/server/BlogServiceImpl.class",
+                    "blog/client/BlogClient.class",
                 ]
             )
         }))

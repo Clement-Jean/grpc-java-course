@@ -82,6 +82,7 @@ public class CalculatorClient {
 
         stream.onCompleted();
 
+        //noinspection ResultOfMethodCallIgnored
         latch.await(3, TimeUnit.SECONDS);
     }
 

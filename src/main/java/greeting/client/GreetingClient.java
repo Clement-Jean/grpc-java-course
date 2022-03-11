@@ -21,9 +21,9 @@ public class GreetingClient {
         System.out.println("Enter doGreetManyTimes");
         GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);
 
-        stub.greetManyTimes(GreetingRequest.newBuilder().setFirstName("Clement").build()).forEachRemaining(response -> {
-            System.out.println(response.getResult());
-        });
+        stub.greetManyTimes(GreetingRequest.newBuilder().setFirstName("Clement").build()).forEachRemaining(response ->
+            System.out.println(response.getResult())
+        );
     }
 
     private static void doLongGreet(ManagedChannel channel) throws InterruptedException {
@@ -52,6 +52,7 @@ public class GreetingClient {
 
         stream.onCompleted();
 
+        //noinspection ResultOfMethodCallIgnored
         latch.await(3, TimeUnit.SECONDS);
     }
 
@@ -81,6 +82,7 @@ public class GreetingClient {
 
         stream.onCompleted();
 
+        //noinspection ResultOfMethodCallIgnored
         latch.await(3, TimeUnit.SECONDS);
     }
 

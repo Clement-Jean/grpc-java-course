@@ -86,7 +86,7 @@ public final class CalculatorClient {
         latch.await(3, TimeUnit.SECONDS);
     }
 
-    private static SqrtResponse doSqrt(CalculatorServiceGrpc.CalculatorServiceBlockingStub stub) {
+    private static void doSqrt(CalculatorServiceGrpc.CalculatorServiceBlockingStub stub) {
         System.out.println("Enter doSqrt");
         SqrtResponse response = stub.sqrt(SqrtRequest.newBuilder().setNumber(25).build());
 
@@ -95,11 +95,9 @@ public final class CalculatorClient {
         try {
             response = stub.sqrt(SqrtRequest.newBuilder().setNumber(-1).build());
             System.out.println("Sqrt -1 = " + response.getResult());
-            return response;
         } catch (RuntimeException e) {
             System.out.println("Got an exception for sqrt");
             e.printStackTrace();
-            return null;
         }
     }
 

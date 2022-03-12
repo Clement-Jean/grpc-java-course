@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class GreetingServerTest extends ServerTestBase<GreetingServiceGrpc.GreetingServiceBlockingStub, GreetingServiceGrpc.GreetingServiceStub> {
 
     GreetingServerTest() {
-        addService(new GreetingServiceImpl());
+        addService(new GreetingServiceImpl(new SleeperImpl()));
         setBlockingStubInstantiator(GreetingServiceGrpc::newBlockingStub);
     }
 

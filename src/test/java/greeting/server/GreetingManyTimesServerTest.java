@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class GreetingManyTimesServerTest extends ServerTestBase<GreetingServiceGrpc.GreetingServiceBlockingStub, GreetingServiceGrpc.GreetingServiceStub> {
 
     GreetingManyTimesServerTest() {
-        addService(new GreetingServiceImpl());
+        addService(new GreetingServiceImpl(new SleeperImpl()));
         setBlockingStubInstantiator(GreetingServiceGrpc::newBlockingStub);
     }
 

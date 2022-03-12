@@ -19,7 +19,7 @@ public class GreetingWithDeadlineTest extends ServerTestBase<
     GreetingServiceGrpc.GreetingServiceStub
 > {
     GreetingWithDeadlineTest() {
-        addService(new GreetingServiceImpl());
+        addService(new GreetingServiceImpl(new SleeperImpl()));
         setBlockingStubInstantiator(GreetingServiceGrpc::newBlockingStub);
     }
 

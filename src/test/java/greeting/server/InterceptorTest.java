@@ -21,7 +21,7 @@ public class InterceptorTest {
     void interceptPassingTest() throws IOException, InterruptedException {
         String serverName = "test";
         InProcessServerBuilder builder = InProcessServerBuilder.forName(serverName)
-                .addService(new GreetingServiceImpl())
+                .addService(new GreetingServiceImpl(new SleeperImpl()))
                 .intercept(new HeaderCheckInterceptor());
 
         Server server = builder.build();
@@ -50,7 +50,7 @@ public class InterceptorTest {
     void interceptErrorTest() throws IOException, InterruptedException {
         String serverName = "test";
         InProcessServerBuilder builder = InProcessServerBuilder.forName(serverName)
-                .addService(new GreetingServiceImpl())
+                .addService(new GreetingServiceImpl(new SleeperImpl()))
                 .intercept(new HeaderCheckInterceptor());
 
         Server server = builder.build();

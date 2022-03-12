@@ -24,7 +24,7 @@ public class LongGreetingServerTest extends ServerTestBase<GreetingServiceGrpc.G
     private Throwable error = null;
 
     LongGreetingServerTest() {
-        addService(new GreetingServiceImpl());
+        addService(new GreetingServiceImpl(new SleeperImpl()));
         setAsyncStubInstantiator(GreetingServiceGrpc::newStub);
     }
 

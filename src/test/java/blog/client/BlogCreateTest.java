@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import utils.ClientTestBase;
 
 import java.io.IOException;
-import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;

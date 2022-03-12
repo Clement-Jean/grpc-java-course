@@ -9,7 +9,7 @@ import utils.Sleeper;
 
 public final class GreetingServiceImpl extends GreetingServiceGrpc.GreetingServiceImplBase {
 
-    Sleeper sleeper;
+    final Sleeper sleeper;
 
     GreetingServiceImpl(Sleeper sleeper) {
         this.sleeper = sleeper;

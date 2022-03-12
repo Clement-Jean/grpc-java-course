@@ -2,10 +2,10 @@ package blog.server;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.Empty;
+import com.mongodb.MongoException;
 import com.mongodb.client.*;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
-import com.mongodb.client.result.UpdateResult;
 import com.proto.blog.Blog;
 import com.proto.blog.BlogId;
 import com.proto.blog.BlogServiceGrpc;
@@ -15,17 +15,19 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.combine;
+import static com.mongodb.client.model.Updates.set;
 
 public final class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
 
     @VisibleForTesting
     static final String BLOG_COULDNT_BE_CREATED = "The blog could not be created";
     @VisibleForTesting
-    static final String BLOG_COULDNT_BE_UPDATED = "The blog could not be updated";
-    @VisibleForTesting
     static final String BLOG_COULDNT_BE_DELETED = "The blog could not be deleted";
     @VisibleForTesting
     static final String BLOG_WAS_NOT_FOUND = "The blog with the corresponding id was not found";
+    @VisibleForTesting
+    static final String ID_CANNOT_BE_EMPTY = "The blog ID cannot be empty";
 
     private final MongoCollection<Document> mongoCollection;
 
@@ -63,7 +65,14 @@ public final class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
             .append("content", request.getContent());
 
         System.out.println("Inserting blog...");
-        InsertOneResult result = mongoCollection.insertOne(doc);
+        InsertOneResult result;
+
+        try {
+            result = mongoCollection.insertOne(doc);
+        } catch (MongoException e) {
+            responseObserver.onError(error(Status.INTERNAL, BLOG_COULDNT_BE_CREATED, e.getLocalizedMessage()));
+            return;
+        }
 
         if (!result.wasAcknowledged() || result.getInsertedId() == null) {
             responseObserver.onError(error(Status.INTERNAL, BLOG_COULDNT_BE_CREATED));
@@ -81,21 +90,25 @@ public final class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
     public void readBlog(BlogId request, StreamObserver<Blog> responseObserver) {
         System.out.println("Received Read Blog request");
 
-        String blogId = request.getId();
-
-        System.out.println("Searching for a blog with id: " + blogId);
-        Document result;
-
-        try {
-            result = mongoCollection.find(eq("_id", new ObjectId(blogId))).first();
-        } catch (Exception e) {
-            responseObserver.onError(error(Status.NOT_FOUND, BLOG_WAS_NOT_FOUND, e.getLocalizedMessage()));
+        if (request.getId().isEmpty()) {
+            responseObserver.onError(error(Status.INVALID_ARGUMENT, ID_CANNOT_BE_EMPTY));
             return;
         }
 
+        String id = request.getId();
+
+        System.out.println("Searching for a blog with id: " + id);
+        Document result = mongoCollection.find(eq("_id", new ObjectId(id))).first();
+
         if (result == null) {
             System.out.println("Blog not found");
-            responseObserver.onError(error(Status.NOT_FOUND, BLOG_WAS_NOT_FOUND));
+            responseObserver.onError(
+                error(
+                    Status.NOT_FOUND,
+                    BLOG_WAS_NOT_FOUND,
+                    "BlogId: " + id
+                )
+            );
             return;
         }
 
@@ -107,35 +120,33 @@ public final class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
     @Override
     public void updateBlog(Blog request, StreamObserver<Empty> responseObserver) {
         System.out.println("Received Update Blog request");
-        String blogId = request.getId();
 
-        System.out.println("Searching for a blog so we can update it");
-        Document result;
-
-        try {
-            result = mongoCollection.find(eq("_id", new ObjectId(blogId))).first();
-        } catch (Exception e) {
-            responseObserver.onError(error(Status.NOT_FOUND, BLOG_WAS_NOT_FOUND, e.getLocalizedMessage()));
+        if (request.getId().isEmpty()) {
+            responseObserver.onError(error(Status.INVALID_ARGUMENT, ID_CANNOT_BE_EMPTY));
             return;
         }
+
+        String id = request.getId();
+
+        System.out.println("Searching for a blog so we can update it");
+        Document result = mongoCollection.findOneAndUpdate(
+            eq("_id", new ObjectId(id)),
+            combine(
+                set("author", request.getAuthor()),
+                set("title", request.getTitle()),
+                set("content", request.getContent())
+            )
+        );
 
         if (result == null) {
             System.out.println("Blog not found");
-            responseObserver.onError(error(Status.NOT_FOUND, BLOG_WAS_NOT_FOUND));
-            return;
-        }
-
-        Document replacement = new Document("author", request.getAuthor())
-            .append("title", request.getTitle())
-            .append("content", request.getContent())
-            .append("_id", new ObjectId(blogId));
-
-        System.out.println("Replacing blog in database...");
-
-        UpdateResult updateResult = mongoCollection.replaceOne(eq("_id", result.getObjectId("_id")), replacement);
-
-        if (!updateResult.wasAcknowledged()) {
-            responseObserver.onError(error(Status.INTERNAL, BLOG_COULDNT_BE_UPDATED));
+            responseObserver.onError(
+                error(
+                    Status.NOT_FOUND,
+                    BLOG_WAS_NOT_FOUND,
+                    "BlogId: " + id
+                )
+            );
             return;
         }
 
@@ -148,13 +159,18 @@ public final class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
     public void deleteBlog(BlogId request, StreamObserver<Empty> responseObserver) {
         System.out.println("Received Delete Blog Request");
 
+        if (request.getId().isEmpty()) {
+            responseObserver.onError(error(Status.INVALID_ARGUMENT, ID_CANNOT_BE_EMPTY));
+            return;
+        }
+
+        String id = request.getId();
         DeleteResult result;
 
         try {
-            result = mongoCollection.deleteOne(eq("_id", new ObjectId(request.getId())));
-        } catch (Exception e) {
-            System.out.println("Blog not found");
-            responseObserver.onError(error(Status.NOT_FOUND, BLOG_WAS_NOT_FOUND, e.getLocalizedMessage()));
+            result = mongoCollection.deleteOne(eq("_id", new ObjectId(id)));
+        } catch (MongoException e) {
+            responseObserver.onError(error(Status.INTERNAL, BLOG_COULDNT_BE_DELETED, e.getLocalizedMessage()));
             return;
         }
 
@@ -166,7 +182,13 @@ public final class BlogServiceImpl extends BlogServiceGrpc.BlogServiceImplBase {
 
         if (result.getDeletedCount() == 0) {
             System.out.println("Blog not found");
-            responseObserver.onError(error(Status.NOT_FOUND, BLOG_WAS_NOT_FOUND));
+            responseObserver.onError(
+                error(
+                    Status.NOT_FOUND,
+                    BLOG_WAS_NOT_FOUND,
+                    "BlogId: " + id
+                )
+            );
             return;
         }
 

@@ -1,7 +1,9 @@
 package blog.server;
 
-import com.mongodb.client.*;
-import com.mongodb.client.result.UpdateResult;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.proto.blog.Blog;
 import com.proto.blog.BlogServiceGrpc;
 import io.grpc.Status;
@@ -51,10 +53,7 @@ public class BlogUpdateTest extends ServerTestBase<
                 .append("title", title + "_old")
                 .append("content", content + "_old");
 
-        when(mockCollection.find(any(Bson.class))).thenReturn(iterable);
-        when(iterable.first()).thenReturn(blog);
-        when(mockCollection.replaceOne(any(Bson.class), any(Document.class)))
-                .thenReturn(UpdateResult.acknowledged(1, null, null));
+        when(mockCollection.findOneAndUpdate(any(Bson.class), any(Bson.class))).thenReturn(blog);
 
         assertDoesNotThrow(() -> blockingStub.updateBlog(
                 Blog.newBuilder()
@@ -68,29 +67,15 @@ public class BlogUpdateTest extends ServerTestBase<
 
     @Test
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    void updateNotAcknowledgedTest() {
-        String id = "579397d20c2dd41b9a8a09eb";
-        ObjectId oid = new ObjectId(id);
-        String author = "Clement";
-        String title = "My Blog";
-        String content = "This is a cool blog";
-        Document blog = new Document("_id", oid)
-                .append("author", author + "_old")
-                .append("title", title + "_old")
-                .append("content", content + "_old");
-
-        when(mockCollection.find(any(Bson.class))).thenReturn(iterable);
-        when(iterable.first()).thenReturn(blog);
-        when(mockCollection.replaceOne(any(Bson.class), any(Document.class))).thenReturn(UpdateResult.unacknowledged());
-
+    void readInvalidIdTest() {
         try {
-            blockingStub.updateBlog(Blog.newBuilder().setId(id).build());
+            blockingStub.updateBlog(Blog.newBuilder().build());
             fail("There should be an error in this case");
         } catch (StatusRuntimeException e) {
             Status status = Status.fromThrowable(e);
 
-            assertEquals(Status.Code.INTERNAL, status.getCode());
-            assertEquals(BlogServiceImpl.BLOG_COULDNT_BE_UPDATED, status.getDescription());
+            assertEquals(Status.Code.INVALID_ARGUMENT, status.getCode());
+            assertEquals(BlogServiceImpl.ID_CANNOT_BE_EMPTY, status.getDescription());
         }
     }
 
@@ -101,24 +86,6 @@ public class BlogUpdateTest extends ServerTestBase<
 
         when(mockCollection.find(any(Bson.class))).thenReturn(iterable);
         when(iterable.first()).thenReturn(null);
-
-        try {
-            blockingStub.updateBlog(Blog.newBuilder().setId(id).build());
-            fail("There should be an error in this case");
-        } catch (StatusRuntimeException e) {
-            Status status = Status.fromThrowable(e);
-
-            assertEquals(Status.Code.NOT_FOUND, status.getCode());
-            assertEquals(BlogServiceImpl.BLOG_WAS_NOT_FOUND, status.getDescription());
-        }
-    }
-
-    @Test
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    void updateErrorTest() {
-        String id = "579397d20c2dd41b9a8a09eb";
-
-        when(mockCollection.find(any(Bson.class))).thenThrow(Status.UNKNOWN.asRuntimeException());
 
         try {
             blockingStub.updateBlog(Blog.newBuilder().setId(id).build());

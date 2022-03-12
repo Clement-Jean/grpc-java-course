@@ -65,29 +65,25 @@ public class BlogReadTest extends ServerTestBase<
 
     @Test
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    void readNotFoundTest() {
-        String id = "579397d20c2dd41b9a8a09eb";
-
-        when(mockCollection.find(any(Bson.class))).thenReturn(iterable);
-        when(iterable.first()).thenReturn(null);
-
+    void readInvalidIdTest() {
         try {
-            blockingStub.readBlog(BlogId.newBuilder().setId(id).build());
+            blockingStub.readBlog(BlogId.getDefaultInstance());
             fail("There should be an error in this case");
         } catch (StatusRuntimeException e) {
             Status status = Status.fromThrowable(e);
 
-            assertEquals(Status.Code.NOT_FOUND, status.getCode());
-            assertEquals(BlogServiceImpl.BLOG_WAS_NOT_FOUND, status.getDescription());
+            assertEquals(Status.Code.INVALID_ARGUMENT, status.getCode());
+            assertEquals(BlogServiceImpl.ID_CANNOT_BE_EMPTY, status.getDescription());
         }
     }
 
     @Test
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    void readErrorTest() {
+    void readNotFoundTest() {
         String id = "579397d20c2dd41b9a8a09eb";
 
-        when(mockCollection.find(any(Bson.class))).thenThrow(Status.UNKNOWN.asRuntimeException());
+        when(mockCollection.find(any(Bson.class))).thenReturn(iterable);
+        when(iterable.first()).thenReturn(null);
 
         try {
             blockingStub.readBlog(BlogId.newBuilder().setId(id).build());

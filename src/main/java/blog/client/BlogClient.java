@@ -44,11 +44,10 @@ public final class BlogClient {
         System.out.println("Reading blog....");
 
         try {
-            Blog readBlogResponse = stub.readBlog(blogId);
+            Blog readResponse = stub.readBlog(blogId);
 
-            System.out.println("Blog read:");
-            System.out.println(readBlogResponse);
-            return readBlogResponse;
+            System.out.println("Blog read:" + readResponse);
+            return readResponse;
         } catch (StatusRuntimeException e) {
             System.out.println("Couldn't read the blog");
             e.printStackTrace();
@@ -83,9 +82,7 @@ public final class BlogClient {
     @VisibleForTesting
     static void listBlogs(BlogServiceGrpc.BlogServiceBlockingStub stub, PrintStream ps) {
         ps.println("Listing blogs...");
-        stub.listBlogs(Empty.getDefaultInstance()).forEachRemaining(blog ->
-            ps.print(blog.toString())
-        );
+        stub.listBlogs(Empty.getDefaultInstance()).forEachRemaining(ps::print);
     }
 
     @VisibleForTesting
@@ -108,15 +105,15 @@ public final class BlogClient {
     private static void run(ManagedChannel channel) {
         BlogServiceGrpc.BlogServiceBlockingStub stub = BlogServiceGrpc.newBlockingStub(channel);
 
-        BlogId createdBlogId = createBlog(stub);
+        BlogId blogId = createBlog(stub);
 
-        if (createdBlogId == null)
+        if (blogId == null)
             return;
 
-        readBlog(stub, createdBlogId);
-        updateBlog(stub, createdBlogId.getId());
+        readBlog(stub, blogId);
+        updateBlog(stub, blogId.getId());
         listBlogs(stub, System.out);
-        deleteBlog(stub, createdBlogId);
+        deleteBlog(stub, blogId);
     }
 
     @ExcludeFromJacocoGeneratedReport

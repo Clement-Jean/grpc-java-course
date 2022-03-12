@@ -15,7 +15,7 @@ public final class GreetingServerTls {
                     new File("ssl/server.crt"),
                     new File("ssl/server.pem")
                 )
-                .addService(new GreetingServiceImpl())
+                .addService(new GreetingServiceImpl(new SleeperImpl()))
                 .build();
 
         server.start();

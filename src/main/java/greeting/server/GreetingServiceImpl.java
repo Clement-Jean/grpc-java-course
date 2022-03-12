@@ -5,8 +5,16 @@ import com.proto.greeting.GreetingResponse;
 import com.proto.greeting.GreetingServiceGrpc;
 import io.grpc.Context;
 import io.grpc.stub.StreamObserver;
+import utils.Sleeper;
 
 public final class GreetingServiceImpl extends GreetingServiceGrpc.GreetingServiceImplBase {
+
+    Sleeper sleeper;
+
+    GreetingServiceImpl(Sleeper sleeper) {
+        this.sleeper = sleeper;
+    }
+
     @Override
     public void greet(GreetingRequest request, StreamObserver<GreetingResponse> responseObserver) {
         responseObserver.onNext(GreetingResponse.newBuilder().setResult("Hello " + request.getFirstName()).build());
@@ -78,7 +86,7 @@ public final class GreetingServiceImpl extends GreetingServiceGrpc.GreetingServi
                 if (current.isCancelled())
                     return;
 
-                Thread.sleep(100);
+                sleeper.sleep(100);
             }
 
             responseObserver.onNext(GreetingResponse.newBuilder().setResult("Hello " + request.getFirstName()).build());

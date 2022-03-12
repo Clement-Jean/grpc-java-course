@@ -11,7 +11,7 @@ public final class GreetingServer {
         int port = 50051;
 
         Server server = ServerBuilder.forPort(port)
-            .addService(new GreetingServiceImpl())
+            .addService(new GreetingServiceImpl(new SleeperImpl()))
             .addService(ProtoReflectionService.newInstance())
             .intercept(new LogInterceptor())
             .intercept(new HeaderCheckInterceptor())

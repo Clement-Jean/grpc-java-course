@@ -12,9 +12,9 @@
   I do the maximum to keep the main features and the code syntax similar by keeping the edits trivial. **However if you
   do get in a situation where you feel lost, leave an `issue` on the repository**
 - The coverage shown in the badges section only counts the classes that need testing, such as:
-  - greeting/server/GreetingServiceImpl,
-  - calculator/server/CalculatorServiceImpl,
-  - blog/server/BlogServiceImpl,
+  - greeting/server/GreetingServiceImpl
+  - calculator/server/CalculatorServiceImpl
+  - blog/server/BlogServiceImpl
   - blog/client/BlogClient
   
   For more information, please check the `jacocoTestReport` task in `build.gradle`

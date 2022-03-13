@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package blog;
 
+import "google/protobuf/empty.proto";
+
 option java_package = "com.proto.blog";
 option java_multiple_files = true;
-
-import "google/protobuf/empty.proto";
 
 message Blog {
   string id = 1;
@@ -22,26 +22,26 @@ service BlogService {
   // Requests the creation for a Blog
   // Returns Status.INTERNAL if the blog couldn't be created due to Db error
   // Returns the created Blog's Id
-  rpc createBlog(Blog) returns (BlogId);
+  rpc CreateBlog(Blog) returns (BlogId);
 
   // Requests access to the content of a Blog by sending an Id
   // Returns Status.NOT_FOUND if the Id doesn't match any Blog in Db
   // Returns Blog content
-  rpc readBlog(BlogId) returns (Blog);
+  rpc ReadBlog(BlogId) returns (Blog);
 
   // Requests the update of a Blog in Db
   // Returns Status.NOT_FOUND if the Id doesn't match any Blog in Db
   // Returns Status.INTERNAL if the blog couldn't be updated due to Db error
   // Returns Empty
-  rpc updateBlog(Blog) returns (google.protobuf.Empty);
+  rpc UpdateBlog(Blog) returns (google.protobuf.Empty);
 
   // Requests the delete of a Blog in Db by giving its Id
   // Returns Status.NOT_FOUND if the Id doesn't match any Blog in Db
   // Returns Status.INTERNAL if the blog couldn't be deleted due to Db error
   // Returns Empty
-  rpc deleteBlog(BlogId) returns (google.protobuf.Empty);
+  rpc DeleteBlog(BlogId) returns (google.protobuf.Empty);
 
   // Requests access to all the Blogs in Db
   // Returns stream of Blogs
-  rpc listBlogs(google.protobuf.Empty) returns (stream Blog);
+  rpc ListBlogs(google.protobuf.Empty) returns (stream Blog);
 }

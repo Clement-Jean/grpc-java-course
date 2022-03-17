@@ -3,10 +3,12 @@ name: build master branch
 on:
   push:
     branches: [ master ]
+    paths-ignore:
+      - "**/*.md"
   pull_request:
     branches: [ master ]
-  paths-ignore:
-    - "**/*.md"
+    paths-ignore:
+      - "**/*.md"
 
 jobs:
   build:

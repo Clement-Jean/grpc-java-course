@@ -6,11 +6,13 @@ on:
     paths:
       - "src/**/*.java"
       - "*.gradle"
+      - "gradle-*"
   pull_request:
     branches: [ master ]
     paths:
       - "src/**/*.java"
       - "*.gradle"
+      - "gradle-*"
 
 jobs:
   build:

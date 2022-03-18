@@ -3,12 +3,14 @@ name: build master branch
 on:
   push:
     branches: [ master ]
-    paths-ignore:
-      - "**/*.md"
+    paths:
+      - "src/**/*.java"
+      - "*.gradle"
   pull_request:
     branches: [ master ]
-    paths-ignore:
-      - "**/*.md"
+    paths:
+      - "src/**/*.java"
+      - "*.gradle"
 
 jobs:
   build:

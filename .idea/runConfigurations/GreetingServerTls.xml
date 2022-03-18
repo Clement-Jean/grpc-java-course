@@ -4,7 +4,7 @@
     <module name="grpc-java-course.main" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="greeting.server.*" />
+        <option name="PATTERN" value="utils.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

@@ -111,15 +111,15 @@ public final class BlogClient {
     private static void run(ManagedChannel channel) {
         BlogServiceGrpc.BlogServiceBlockingStub stub = BlogServiceGrpc.newBlockingStub(channel);
 
-        BlogId blogId = createBlog(stub);
+        BlogId id = createBlog(stub);
 
-        if (blogId == null)
+        if (id == null)
             return;
 
-        readBlog(stub, blogId);
-        updateBlog(stub, blogId);
+        readBlog(stub, id);
+        updateBlog(stub, id);
         listBlogs(stub, System.out);
-        deleteBlog(stub, blogId);
+        deleteBlog(stub, id);
     }
 
     @ExcludeFromJacocoGeneratedReport

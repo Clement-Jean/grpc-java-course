@@ -11,8 +11,17 @@ on:
       - "**/*.md"
 
 jobs:
-  build:
+  pr-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v1
 
+      - name: Run protolint
+        uses: plexsystems/protolint-action@v0.4.0
+        with:
+          configDirectory: .protolint
+  build:
     runs-on: ${{ matrix.os }}
 
     strategy:

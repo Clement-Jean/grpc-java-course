@@ -10,12 +10,15 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 import utils.ExcludeFromJacocoGeneratedReport;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.PrintStream;
 
 public final class BlogClient {
 
     private BlogClient() {}
 
+    @Nullable
     @VisibleForTesting
     static BlogId createBlog(BlogServiceGrpc.BlogServiceBlockingStub stub) {
         System.out.println("Creating blog....");
@@ -39,8 +42,9 @@ public final class BlogClient {
         }
     }
 
+    @Nullable
     @VisibleForTesting
-    static Blog readBlog(BlogServiceGrpc.BlogServiceBlockingStub stub, BlogId blogId) {
+    static Blog readBlog(BlogServiceGrpc.BlogServiceBlockingStub stub, @Nonnull BlogId blogId) {
         System.out.println("Reading blog....");
 
         try {
@@ -55,12 +59,13 @@ public final class BlogClient {
         }
     }
 
+    @Nullable
     @VisibleForTesting
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    static Blog updateBlog(BlogServiceGrpc.BlogServiceBlockingStub stub, String blogId) {
+    static Blog updateBlog(BlogServiceGrpc.BlogServiceBlockingStub stub, @Nonnull BlogId blogId) {
         try {
             Blog newBlog = Blog.newBuilder()
-                .setId(blogId)
+                .setId(blogId.getId())
                 .setAuthor("Changed Author")
                 .setTitle("New blog (updated)!")
                 .setContent("Hello world this is my first blog! I've added some more content")
@@ -85,9 +90,10 @@ public final class BlogClient {
         stub.listBlogs(Empty.getDefaultInstance()).forEachRemaining(ps::print);
     }
 
+    @Nullable
     @VisibleForTesting
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    static BlogId deleteBlog(BlogServiceGrpc.BlogServiceBlockingStub stub, BlogId blogId) {
+    static BlogId deleteBlog(BlogServiceGrpc.BlogServiceBlockingStub stub, @Nonnull BlogId blogId) {
         try {
             System.out.println("Deleting blog");
             stub.deleteBlog(blogId);
@@ -111,7 +117,7 @@ public final class BlogClient {
             return;
 
         readBlog(stub, blogId);
-        updateBlog(stub, blogId.getId());
+        updateBlog(stub, blogId);
         listBlogs(stub, System.out);
         deleteBlog(stub, blogId);
     }

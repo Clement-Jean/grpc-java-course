@@ -2,6 +2,7 @@ package blog.client;
 
 import com.google.protobuf.Empty;
 import com.proto.blog.Blog;
+import com.proto.blog.BlogId;
 import com.proto.blog.BlogServiceGrpc;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
@@ -31,7 +32,7 @@ public class BlogUpdateTest extends ClientTestBase<BlogServiceGrpc.BlogServiceBl
         }
     }
 
-    private final String blogId = "this_is_an_id";
+    private final BlogId blogId = BlogId.newBuilder().setId("this_is_an_id").build();
 
     @Test
     void updateTest() throws IOException {

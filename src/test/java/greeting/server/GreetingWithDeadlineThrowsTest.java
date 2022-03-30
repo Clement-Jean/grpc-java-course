@@ -55,6 +55,8 @@ public class GreetingWithDeadlineThrowsTest {
             fail("There should be an error in this case");
         } catch (RuntimeException e) {
             // success
+            channel.shutdownNow();
+            server.shutdownNow();
         }
     }
 }

@@ -16,7 +16,7 @@ SERVER_CN=localhost
 
 # Step 1: Generate Certificate Authority + Trust Certificate (ca.crt)
 openssl genrsa -passout pass:1111 -des3 -out ca.key 4096
-openssl req -passin pass:1111 -new -x509 -days 365 -key ca.key -out ca.crt -subj "/CN=${SERVER_CN}"
+openssl req -passin pass:1111 -new -x509 -days 365 -key ca.key -out ca.crt -subj "/CN=ca"
 
 # Step 2: Generate the Server Private Key (server.key)
 openssl genrsa -passout pass:1111 -des3 -out server.key 4096

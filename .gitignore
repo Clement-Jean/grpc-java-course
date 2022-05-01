@@ -78,3 +78,6 @@ gradle-app.setting
 *.key
 *.csr
 *.pem
+
+## Mac
+.DS_Store

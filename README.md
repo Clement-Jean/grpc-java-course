@@ -2,6 +2,8 @@
 
 [![build master branch](https://github.com/Clement-Jean/grpc-java-course/actions/workflows/gradle.yml/badge.svg)](https://github.com/Clement-Jean/grpc-java-course/actions/workflows/gradle.yml) ![Coverage](.github/badges/jacoco.svg) [![lint protocol buffers](https://github.com/Clement-Jean/grpc-java-course/actions/workflows/lint.yml/badge.svg)](https://github.com/Clement-Jean/grpc-java-course/actions/workflows/lint.yml) ![Udemy](.github/badges/udemy.svg)
 
+## COUPON: `START_AUG_22`
+
 ## Notes
 
 - The code you see in this repository might be little different from what you saw in the course videos, this is due to the fact that:

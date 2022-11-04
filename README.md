@@ -2,7 +2,7 @@
 
 [![build master branch](https://github.com/Clement-Jean/grpc-java-course/actions/workflows/gradle.yml/badge.svg)](https://github.com/Clement-Jean/grpc-java-course/actions/workflows/gradle.yml) ![Coverage](.github/badges/jacoco.svg) [![lint protocol buffers](https://github.com/Clement-Jean/grpc-java-course/actions/workflows/lint.yml/badge.svg)](https://github.com/Clement-Jean/grpc-java-course/actions/workflows/lint.yml) ![Udemy](.github/badges/udemy.svg)
 
-## COUPON: `START_OCT_22`
+## COUPON: `START_NOV_22`
 
 ## Notes
 
@@ -18,5 +18,5 @@
   - calculator/server/CalculatorServiceImpl
   - blog/server/BlogServiceImpl
   - blog/client/BlogClient
-  
+
   For more information, please check the `jacocoTestReport` task in `build.gradle`

@@ -32,6 +32,6 @@ echo "Step 4: Sign the certificate with the CA we created (it's called self sign
 :: Step 4: Sign the certificate with the CA we created (it's called self signing) - server.crt
 openssl x509 -req -days 365 -in server.csr -CA ca.crt -CAkey ca.key -passin pass:1111 -set_serial 01 -out server.crt
 
-echo "Step 5"
+echo "Step 5: Convert the server certificate to .pem format (server.pem) - usable by gRPC"
 :: Step 5: Convert the server certificate to .pem format (server.pem) - usable by gRPC
 openssl pkcs8 -topk8 -nocrypt -passin pass:1111 -in server.key -out server.pem

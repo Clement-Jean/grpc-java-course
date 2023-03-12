@@ -63,9 +63,8 @@ jacocoTestReport {
     dependsOn test
 
     reports {
-        html.enabled false
-        xml.enabled false
-        csv.enabled true
+        xml.required = false
+        html.required = false
         csv.destination file("${buildDir}/reports/jacoco/jacoco.csv")
     }
     afterEvaluate {

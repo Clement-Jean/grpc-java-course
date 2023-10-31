@@ -3,7 +3,7 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'com.google.protobuf' version '0.8.18'
+    id 'com.google.protobuf' version '0.9.4'
 
     id 'jacoco'
 }
@@ -16,8 +16,8 @@ repositories {
 }
 
 ext {
-    protoVersion = '3.21.9'
-    grpcVersion = '1.50.2'
+    protoVersion = '3.24.4'
+    grpcVersion = '1.59.0'
 }
 
 protobuf {
@@ -46,12 +46,13 @@ dependencies {
     compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
     implementation "com.google.protobuf:protobuf-java-util:$protoVersion"
 
-    implementation 'org.mongodb:mongodb-driver-sync:4.7.1'
+    implementation 'org.mongodb:mongodb-driver-sync:4.11.0'
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
-    testImplementation 'org.mockito:mockito-core:4.8.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    testImplementation 'org.mockito:mockito-core:5.2.0'
+    testImplementation "io.grpc:grpc-inprocess:$grpcVersion"
 }
 
 test {
